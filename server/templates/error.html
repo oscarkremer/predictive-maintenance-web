@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="jumbotron" style="background-color:#30303087">
+        <h1 style="text-align:center;"> Error </h1>
+        {% if analysis.error_fatal %}
+        <p style="text-align:center;"> There was an FATAL error in the analysis, please check the equipment or the images inserted
+            for analysis</p>    
+        {% else %}
+        <p style="text-align:center;"> There was an error in the analysis, please check the equipment or the images inserted
+            for analysis, then press the button below to re-run your request. </p>    
+            <a href="{{ url_for('reanalysis', analysis_id=analysis.id) }}" class="btn btn-secondary btn-lg btn-block" style="text-align:center;">Return</a>
+        {% endif %}
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    particlesJS.load('particles-js', "{{url_for('static',filename='particles.json')}}", function(){
+    console.log('particles.json loaded...'); });
+</script>
+{% endblock content %}
+

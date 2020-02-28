@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+    <br>
+    <legend class="border-bottom mb-3"> Settings</legend>
+    <div class="list-group">
+      <a href="{{url_for('user', user_id=equipment.owner.id)}}" class="list-group-item list-group-item-action active"> 
+      <b>User:</b> {{ equipment.owner.username }} </a>
+      <a class="list-group-item list-group-item-action">  <b>Email:</b> {{ equipment.owner.email}}</a>
+      <a href="{{url_for('company', company_id=equipment.owner.company.id)}}" class="list-group-item list-group-item-action"> <b>Company:</b> {{ equipment.owner.company.name}}</a>
+      <a class="list-group-item list-group-item-action">  <b>Key:</b> {{ equipment.password}}</a>
+    </a>
+    </div>
+    <form id = "equipment_user" method="POST" action="" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-3">Redefine User</legend>
+        <div class="form-group">
+              {{form.user.label(class="form-control-label") }}
+              {{form.user(class="form-control form-control-lg")}}
+          </div> 
+      <p align='center'>
+          </br>
+          <button type="submit" id="submit-button" class="btn btn-secondary btn-lg btn-block" onClick="return disableMe()">Submit</button>
+      </p>
+      </fieldset>
+    </form>      
+    </div>
+    <br>
+{% endblock content %}
+

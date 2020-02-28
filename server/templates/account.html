@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block content %}
+    <br>
+    <div class="content-section">
+      <div class="media">
+        <img class="class=align-self-center w-25 mr-3" src="{{ image_file }}" style="max-width:120px;max-heigh:120px;">
+        <div class="media-body">
+          <h3 class="account-heading">{{ current_user.username }}</h3>
+          <p class="text-secondary">{{ current_user.email }}</p>
+          <p class="text-secondary">{{ current_user.company.name }}</p>
+        </div>
+    </div>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <legend class="border-bottom mb-3">Account Information</legend>
+                <div class="form-group">
+                    {{ form.username.label(class="form-control-label") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-control-label") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div>
+                  <span class="custom-text" id ="image-text1">Select a image file</span>
+                </div> 
+                <div class="form-group">
+                  <div class="input-group mb-3" id = 'upload-button1'>
+                      <div class="custom-file">
+                          {{form.picture(class="custom-file-input", id="input_image1") }}
+                          {{form.picture.label(class="custom-file-label", for="input_image1")}}
+                          {% if form.picture.errors %}
+                              <div class="invalid-feedback">
+                                  {% for error in form.picture.errors %}
+                                      <span class="text-danger">{{ error }}</span>
+                                  {% endfor %}
+                              </div>
+                          {% endif %}
+                      </div>
+                  </div>
+                </div>
+                <script type="text/javascript">
+                  const realFileBtn1 = document.getElementById("input_image1");
+                  const customBtn1 = document.getElementById("upload-button1");
+                  const customTxt1 = document.getElementById("image-text1");
+                  realFileBtn1.addEventListener("change", function() {
+                  if (realFileBtn1.value) {
+                      customTxt1.innerHTML = realFileBtn1.value.match(
+                      /[\/\\]([\w\d\s\.\-\(\)]+)$/
+                      )[1];
+                  } else {
+                      customTxt1.innerHTML = "Select a image file";
+                  }
+                  });            
+                </script>
+                <small class="text-muted ml-1">
+                    <a class="ml-2" href="{{url_for('account_advanced', user_id=current_user.id)}}">Advanced Settings</a>
+                </small>
+                <div class="border-top ml-1">
+                    <small class="text-muted ml-1">
+                        <a class="ml-2" href=""></a>
+                    </small>    
+                </div>   
+            <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
+          </fieldset>
+        </form>
+        
+    </div>
+    <br>
+{% endblock content %}
+

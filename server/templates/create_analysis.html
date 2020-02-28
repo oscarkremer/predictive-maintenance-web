@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form id = "analysis" method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <div class="form-group" >
+                {{ form.title.label(class="form-control-label") }}
+                {% if form.title.errors %}
+                    {{ form.title(class="form-control form-control-lg is-invalid", placeholder="testando") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.title.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.title(class="form-control form-control-lg", placeholder="Title") }}
+                {% endif %}
+            </div>
+            <div>
+                <span class="custom-text" id ="image-text1">Select a image file</span>
+            </div> 
+            <div class="form-group">
+                <div class="input-group mb-3" id = 'upload-button1'>
+                    <div class="custom-file">
+                        {{form.picture_1(class="custom-file-input", id="input_image1") }}
+                        {{form.picture_1.label(class="custom-file-label", for="input_image1")}}
+                        {% if form.picture_1.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.picture_1.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span class="custom-text" id ="image-text2">Select a image file</span>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3" id = 'upload-button2'>
+                    <div class="custom-file">
+                        {{form.picture_2(class="custom-file-input", id="input_image2") }}
+                        {{form.picture_2.label(class="custom-file-label", for="input_image2")}}
+                        {% if form.picture_2.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.picture_2.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <span class="custom-text" id ="image-text3">Select a image file</span>
+            </div>
+            <div class="form-group">
+                <div class="input-group mb-3" id = 'upload-button3'>
+                    <div class="custom-file">
+                        {{form.picture_3(class="custom-file-input", id="input_image3") }}
+                        {{form.picture_3.label(class="custom-file-label", for="input_image3")}}
+                        {% if form.picture_3.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.picture_3.errors %}
+                                    <span class="text-danger">{{ error }}</span></br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>    
+            <script type="text/javascript">
+            const realFileBtn1 = document.getElementById("input_image1");
+            const customBtn1 = document.getElementById("upload-button1");
+            const customTxt1 = document.getElementById("image-text1");
+            realFileBtn1.addEventListener("change", function() {
+            if (realFileBtn1.value) {
+                customTxt1.innerHTML = realFileBtn1.value.match(
+                /[\/\\]([\w\d\s\.\-\(\)]+)$/
+                )[1];
+            } else {
+                customTxt1.innerHTML = "Select a image file";
+            }
+            });
+            const realFileBtn2 = document.getElementById("input_image2");
+            const customBtn2 = document.getElementById("upload-button2");
+            const customTxt2 = document.getElementById("image-text2");
+            realFileBtn2.addEventListener("change", function() {
+            if (realFileBtn2.value) {
+                customTxt2.innerHTML = realFileBtn2.value.match(
+                /[\/\\]([\w\d\s\.\-\(\)]+)$/
+                )[1];
+            } else {
+                customTxt2.innerHTML = "Select a image file";
+            }
+            });
+            const realFileBtn3 = document.getElementById("input_image3");
+            const customBtn3 = document.getElementById("upload-button3");
+            const customTxt3 = document.getElementById("image-text3");
+            realFileBtn3.addEventListener("change", function() {
+            if (realFileBtn3.value) {
+                customTxt3.innerHTML = realFileBtn3.value.match(
+                /[\/\\]([\w\d\s\.\-\(\)]+)$/
+                )[1];
+            } else {
+                customTxt3.innerHTML = "Select a image file";
+            }
+            });
+            var clicked = false;
+            function disableMe() {
+                var form = document.getElementById("analysis");
+                var isValidForm = form.checkValidity();
+                if (isValidForm) {
+                    if(!clicked){
+                    document.getElementById("submit-button").value = "thank you";
+                    clicked = true;
+                    return true;
+                    }
+                    else{
+                        return false;
+                    }                  
+                }
+            }
+                
+        </script>
+        <p align='center'>
+            </br>
+            <button type="submit" id="submit-button" class="btn btn-secondary btn-lg btn-block" onClick="return disableMe()">Submit</button>
+        </p>
+        </fieldset>
+    </form>
+</div>
+{% endblock content %}
+
+

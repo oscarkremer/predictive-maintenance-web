@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+{% block content %}
+<br>
+  <article class="media content-section">
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js'></script>
+    <div class="media-body">
+      <div class="article-metadata">
+        <h2 class="mc-2">{{user.username}}</h2>
+        <p class="mc-2">{{user.email}}</p>
+      </div>
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#analysis">Analysis</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#profile">Profile</a>
+        </li>
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade" id="analysis">
+            <div class='container-fluid'>
+            <br>
+            {% for analysis in analysiss %}
+                <br>
+                <article class="media">
+                <img src="{{url_for('static', filename='profile_pics/' + analysis.author.image_file) }}" 
+                    class="align-self-center w-25 mr-3" style="max-width:120px;max-heigh:120px;">  
+                <div class="media-body">
+                    <h4><a class="mt-0 mb-1" href="{{ url_for('analysis', analysis_id=analysis.id) }}">{{ analysis.title }}</a></h4>
+                    <h5 class="mr-2" href="#">{{analysis.author.username}} </h5>
+                    <h5 class="mr-2" href="#">{{analysis.author.email}} </h5>
+                    <h5 class="mr-2" href="#">{{analysis.date_posted.strftime('%Y-%m-%d')}} </h5>
+                    <p class="article-content">{{analysis.content}}</p>
+                </div>
+                </article>
+                <br>
+                <hr style="width: 100%; height: 1px; " />  
+            {% endfor %}
+            </div>
+            <br>
+        </div>
+        <div class="tab-pane fade active show" id="profile">
+        <div class='container-fluid'>
+        <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset>
+        <legend class="border-bottom mb-3">Account Information</legend>
+        <div class="form-group">
+        {{ form.username.label(class="form-control-label") }}
+        {% if form.username.errors %}
+          {{ form.username(class="form-control form-control-lg is-invalid") }}
+             <div class="invalid-feedback">
+            {% for error in form.username.errors %}
+              <span>{{ error }}</span>
+            {% endfor %}
+            </div>
+        {% else %}
+          {{ form.username(class="form-control form-control-lg") }}
+        {% endif %}
+        </div>
+        <div class="form-group">
+          {{form.company.label(class="form-control-label") }}
+          {{form.company(class="form-control form-control-lg")}}
+        </div>
+        <div class="form-group">
+          {{ form.email.label(class="form-control-label") }}
+          {% if form.email.errors %}
+            {{ form.email(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+              {% for error in form.email.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+              </div>
+          {% else %}
+            {{ form.email(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div>
+          <span class="custom-text" id ="image-text1">Select a image file</span>
+        </div> 
+        <div class="form-group">
+          <div class="input-group mb-3" id = 'upload-button1'>
+            <div class="custom-file">
+              {{form.picture(class="custom-file-input", id="input_image1") }}
+              {{form.picture.label(class="custom-file-label", for="input_image1")}}
+              {% if form.picture.errors %}
+                <div class="invalid-feedback">
+                  {% for error in form.picture.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <script type="text/javascript">
+          const realFileBtn1 = document.getElementById("input_image1");
+          const customBtn1 = document.getElementById("upload-button1");
+          const customTxt1 = document.getElementById("image-text1");
+          realFileBtn1.addEventListener("change", function() {
+          if (realFileBtn1.value) {
+            customTxt1.innerHTML = realFileBtn1.value.match(
+            /[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+          } else {
+            customTxt1.innerHTML = "Select a image file";
+          }});            
+        </script>
+        <div class="form-check">
+          <div class="custom-control custom-checkbox">
+            {{ form.checked(class="custom-control-input", type="checkbox") }}
+            {{ form.checked.label(class="custom-control-label") }}
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="custom-control custom-checkbox">
+            {{ form.admin(class="custom-control-input", type="checkbox") }}
+            {{ form.admin.label(class="custom-control-label") }}
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="custom-control custom-checkbox">
+            {{ form.super_admin(class="custom-control-input", type="checkbox") }}
+            {{ form.super_admin.label(class="custom-control-label") }}
+          </div>
+        </div>
+        <br>
+        <small class="text-muted ml-1">
+          <a class="ml-2" href="{{url_for('account_advanced', user_id=user.id)}}">Advanced Settings</a>
+        </small>
+        <div class="border-top ml-1">
+            <small class="text-muted ml-1">
+                <a class="ml-2" href=""></a>
+            </small>    
+        </div>   
+        </fieldset>
+        </fieldset>
+          <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit</button>
+         </fieldset>
+        </form>
+            </div>
+          <br> 
+       </div>
+      </div>
+      <br>
+  </article>
+{% endblock content %}
+
+

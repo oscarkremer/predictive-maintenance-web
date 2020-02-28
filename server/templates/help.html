@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+        <br>
+        <article class="media">
+        <img src="{{url_for('static', filename='intro/default.png') }}" 
+              class="align-self-center w-25 mr-3" style="max-width:120px; max-heigh:120px;">  
+        <div class="media-body">
+            <h4 class="mt-0 mb-1" href="#">Problems with your Account?</h4>
+            <h5 class="mr-2" href="#">Garten Automation </h5>
+            <h5><a class="mr-2" href="https://garten.com.br/"> Contact us </a></h5>
+            <p class="article-content">+55 (53) 3028-9001       </p>
+            <p class="article-content">oscar@garten.com.br   </p>    
+        </div>
+        </article>
+        <br>
+{% endblock content %}
