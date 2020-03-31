@@ -43,21 +43,6 @@ dirs:
 	@mkdir -p data/plots/subtraction
 	@echo "---> Done"
 
-
-dataset-train:
-	@echo "---> Creating dataset for grid-search, test and validation"
-	@$(PYTHON_INTERPRETER) src/api/dataset.py
-
-filter:
-	@echo "---> Applying Moving Average Filtering Technique"
-	@$(PYTHON_INTERPRETER) src/api/mean_filter.py --filter-points $(FILTER_POINTS)
-
-
-entropy:
-	@echo "---> System Evaluation with Entropy"
-	@$(PYTHON_INTERPRETER) src/api/entropy.py
-
-
 install:
 	@echo "---> Installing dependencies"
 	@conda env update -f environment.yml

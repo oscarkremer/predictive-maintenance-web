@@ -61,37 +61,7 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.Div(className='row', children=
-        [html.Div(className="three columns div-left-panel",
-        children=[
-            html.Div(className='div-info',
-            children= [
-                html.Div(
-                 [html.Img(className='logo', src="/assets/default.png")]
-                , style={'text-align': 'center'}),
-                html.H6('Garten Automação', className='title-header'),
-                html.P('Esta dashboard fornece dados de temperatura, lidos a partir de um sistema de termometria Garten. Os dados são unificados e aplicados a algoritmos inteligentes para detecção e previsão de anomalias.')    
-            ]),
-            html.Div(className='div-news', children=[
-                html.Div([
-                    html.Div([
-                        html.P('Alarmes', className='p-news'),
-                        html.P('Última Atualização : 19:58:35', className='p-news float-right'),
-                        html.Div(id='alarms', className='div-bid-ask'),
-                        dcc.Interval(id='alarms-interval',
-                            interval=5000,
-                            n_intervals=0)
-                        ])
-                ])
-            ]),
-            html.Div(className='div-currency-toggles',
-            children=[
-                html.Div(id='bid-ask', className='div-bid-ask'),
-                dcc.Interval(id='bid-ask-interval',
-                    interval=5000,
-                    n_intervals=0)
-            ])
-        ]),
-    html.Div(className="nine columns div-right-panel",
+        [html.Div(className="twelve columns div-right-panel",
         children=[
             html.Div(className='row div-top-bar',
             children = [
@@ -121,65 +91,7 @@ app.layout = html.Div([
                 ])
             ]),
             html.Div(className='row', children=[
-                html.Div('Média por Pêndulo', className='section-banner'),
-                html.Div(id='metric-div', children=[
-                    html.Div(id='metric_header', className='row metric-row', children=[
-                        html.Div(className='one column', children=[
-                            html.Div('Silo')
-                        ], style={'margin-right':'2.5rem', 'min-width': '50px'}),
-                        html.Div(className='one column', children=[
-                            html.Div('Pêndulo')
-                        ], style={'margin-right':'2.5rem', 'min-width': '50px'}),
-                        html.Div(className='one column', children=[
-                            html.Div('Sensor')
-                        ], style={'text-align': 'center'}),
-                        html.Div(className='seven columns', children=[
-                            html.Div('Temperatura')
-                        ], style={'text-align': 'center'}),
-                        html.Div(className='one column', children=[
-                            html.Div('Estado')
-                        ], style={'text-align': 'center'}),
-                    ], style={'height':'3rem', 'margin':'1rem 0px', 'text-align':'center'}),
-                    html.Div(id='metric-rows', children=[
-                        html.Div(className='row metric-row', children=chart_row('pendulo-1'), style={'height': '8rem', 'width':'100%'}),
-                        html.Div(className='row metric-row', children=chart_row('pendulo-2'), style={'height': '8rem', 'width':'100%'}),
-                        html.Div(className='row metric-row', children=[
-
-                        ], style={'height': '8rem', 'width':'100%'}),
-                        html.Div(className='row metric-row', children=[
-
-                        ], style={'height': '8rem', 'width':'100%'}),
-                        html.Div(className='row metric-row', children=[
-
-                        ], style={'height': '8rem', 'width':'100%'}),
-                        html.Div(className='row metric-row', children=[
-
-                        ], style={'height': '8rem', 'width':'100%'}),
-                        html.Div(className='row metric-row', children=[
-
-                        ], style={'height': '8rem', 'width':'100%'})
-                    ])
-                ])
-            ]),
-            html.Div(className='row', children=[
-                html.Div(className='chart-style six columns', children=[
-                    html.Div(className='row  chart-top-bar', children=[
-                        html.Span('EURUSD ☰ ', className='inline-block chart-title'),
-                        html.Div(className='graph-top-right inline-block', children=[
-                            html.Div(className='inline-block', children=[
-                                html.Div([
-                                    html.Div(className='Select dropdown-period has-value is-searchable Select--single', children=[
-                                        html.Div(className='Select-control', children=[
-                                            html.Div(className='Select-multi-value-wrapper'),
-                                            html.Span(className='Select-arrow-zone', children=[
-                                                html.Span(className='Select-arrow')
-                                            ])
-                                        ])
-                                    ])
-                                ])
-                            ])
-                        ])
-                    ]), 
+                html.Div(className='chart-style four columns', children=[ 
                     html.Div([
                         html.Div(className='chart-graph js-plotly-plot', children=[
                             dcc.Graph(id='example-1',
@@ -196,27 +108,80 @@ app.layout = html.Div([
                         ])
                     ])
                 ]),
-                html.Div(className='chart-style six columns',children=[
-                    html.Div(className='row  chart-top-bar', children=[
-                        html.Span('USDCHF ☰ ', className='inline-block chart-title'),
-                        html.Div(className='graph-top-right inline-block', children=[
-                            html.Div(className='inline-block', children=[
-                                html.Div([
-                                    html.Div(className='Select dropdown-period has-value is-searchable Select--single', children=[
-                                        html.Div(className='Select-control', children=[
-                                            html.Div(className='Select-multi-value-wrapper'),
-                                            html.Span(className='Select-arrow-zone', children=[
-                                                html.Span(className='Select-arrow')
-                                            ])
-                                        ])
-                                    ])
-                                ])
-                            ])
-                        ])
-                    ]), 
+                html.Div(className='chart-style four columns', children=[ 
                     html.Div([
                         html.Div(className='chart-graph js-plotly-plot', children=[
-                            dcc.Graph(id='example',
+                            dcc.Graph(id='example-2',
+                                figure={
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'}],
+                                    'layout': {
+                                        'title': 'Temperatura Média Silo 1',
+                                        'plot_bgcolor': '#22252b',
+                                        'paper_bgcolor': '#22252b',
+                                        'yaxis': dict(range=[0, 30])
+                                    }
+                            })
+                        ])
+                    ])
+                ]),
+                html.Div(className='chart-style four columns',children=[
+                    html.Div([
+                        html.Div(className='chart-graph js-plotly-plot', children=[
+                            dcc.Graph(id='example-3',
+                                figure={
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pêndulo 3'},
+                                            {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pêndulo 5'}],
+                                    'layout': {
+                                        'title': 'Temperatura Média Silo 5',
+                                        'plot_bgcolor': '#22252b',
+                                        'paper_bgcolor': '#22252b',
+                                        'yaxis': dict(range=[0, 30])
+                                    }
+                            })
+                        ])
+                    ])
+                ])
+            ]),
+                        html.Div(className='row', children=[
+                html.Div(className='chart-style four columns', children=[ 
+                    html.Div([
+                        html.Div(className='chart-graph js-plotly-plot', children=[
+                            dcc.Graph(id='example-4',
+                                figure={
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'}],
+                                    'layout': {
+                                        'title': 'Temperatura Média Silo 1',
+                                        'plot_bgcolor': '#22252b',
+                                        'paper_bgcolor': '#22252b',
+                                        'yaxis': dict(range=[0, 30])
+                                    }
+                            })
+                        ])
+                    ])
+                ]),
+                html.Div(className='chart-style four columns', children=[ 
+                    html.Div([
+                        html.Div(className='chart-graph js-plotly-plot', children=[
+                            dcc.Graph(id='example-5',
+                                figure={
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'}],
+                                    'layout': {
+                                        'title': 'Temperatura Média Silo 1',
+                                        'plot_bgcolor': '#22252b',
+                                        'paper_bgcolor': '#22252b',
+                                        'yaxis': dict(range=[0, 30])
+                                    }
+                            })
+                        ])
+                    ])
+                ]),
+                html.Div(className='chart-style four columns',children=[
+                    html.Div([
+                        html.Div(className='chart-graph js-plotly-plot', children=[
+                            dcc.Graph(id='example-6',
                                 figure={
                                     'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pêndulo 3'},
                                             {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pêndulo 5'}],
@@ -288,167 +253,6 @@ app.layout = html.Div([
             ]),
         ])
         ])])
-
-
-@app.callback(
-    dash.dependencies.Output('bid-ask','children'),
-    [dash.dependencies.Input('bid-ask-interval', 'n_intervals')]
-    )
-def update_value(n):
-    return  [html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('SILO', className='four-col',style={'color':'white'}),
-                        html.P('T(C)', className='four-col', style={'color':'white'}),
-                        html.P('10 dias', className='four-col', style={'color':'white'}),      
-                        html.P('30 dias', className='four-col', style={'color':'white'}),      
-                    ])
-                ])
-            ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('1', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                        ])
-                    ])
-                ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('2', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                        ])
-                    ])
-                ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('7', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                    ])
-                ])
-            ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('9', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                    ])
-                ])
-            ]),
-                        html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('10', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                        ])
-                    ])
-                ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('12', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                    ])
-                ])
-            ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('13', className='four-col'),
-                        function_color_text(),
-                        function_color_text(),
-                        function_color_text()
-                    ])
-                ])
-            ])
-            ]
-
-
-@app.callback(
-    dash.dependencies.Output('alarms','children'),
-    [dash.dependencies.Input('alarms-interval', 'n_intervals')]
-    )
-def update_value(n):
-    return  [html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('SILO', className='three-col',style={'color':'white'}),
-                        html.P('AERA', className='three-col', style={'color':'white'}),
-                        html.P('PESTE', className='three-col', style={'color':'white'})      
-                    ])
-                ])
-            ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('1', className='three-col'),
-                        alarm_color_text(),
-                        alarm_color_text()
-                        ])
-                    ])
-                ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('2', className='three-col'),
-                        alarm_color_text(),
-                        alarm_color_text()
-                        ])
-                    ])
-                ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('3', className='three-col'),
-                        alarm_color_text(),
-                        alarm_color_text()
-                    ])
-                ])
-            ]),
-            html.Div([
-                html.Div(className='row summary', children=[
-                    html.Div(className='row', children=[
-                        html.P('4', className='three-col'),
-                        alarm_color_text(),
-                        alarm_color_text()
-                    ])
-                ])
-            ]),
-            ]
-
-def function_color_text(botto_lim=25, upp_lim=40):
-    value = random.randrange(25,40)
-    if value > 75:
-        return html.P(value, className='four-col', style={'color': 'red'})
-    else:
-        if value < 35:
-            return html.P(value, className='four-col', style={'color': 'green'})
-        else:
-            return html.P(value, className='four-col')
-        
-def alarm_color_text():
-    value = random.randrange(10,90)
-    if value >= 89:
-        return html.P('DANGER', className='three-col', style={'color': 'red'})
-    else:
-        return html.P('SAFE', className='three-col', style={'color': 'green'})
-
-
-
 
 if __name__ == '__main__':
     app.run_server(debug=True)
