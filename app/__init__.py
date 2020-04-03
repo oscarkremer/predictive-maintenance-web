@@ -41,8 +41,7 @@ def _protect_dashviews(dashapp):
 app = Flask(__name__)
 #app.config['SECRET_KEY'] = 'd5e15dd080bab91ed0a457aef93f874b0308e35dbde833d9af6f44d888021f6c'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ffplcwjuwnchtz:d5e15dd080bab91ed0a457aef93f874b0308e35dbde833d9af6f44d888021f6c@ec2-54-83-192-245.compute-1.amazonaws.com:5432/da7cfdmp1uib8j'
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config.from_object(BaseConfig)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
