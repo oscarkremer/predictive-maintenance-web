@@ -4,9 +4,9 @@
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = predictive-maintenance
+BUCKET = predictive-maintenance-ifsul
 PROFILE = default
-PROJECT_NAME := predictive-maintenance
+PROJECT_NAME := predictive-maintenance-ifsul
 POINTS_TO_MODEL := 20
 FILTER_POINTS := 3
 PYTHON_INTERPRETER := python3
@@ -25,7 +25,7 @@ setup: check_environment
 	@conda env create -f environment.yml
 	@make dirs
 	@cp -n .env.example .env
-	@echo "---> To complete setup please run \n---> source activate predictive-maintenance"
+	@echo "---> To complete setup please run \n---> source activate predictive-maintenance-ifsul"
 
 
 dirs:

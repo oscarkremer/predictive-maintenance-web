@@ -1,4 +1,4 @@
-name: predictive-maintenance
+name: predictive-maintenance-ifsul
 channels:
   - conda-forge
   - defaults
