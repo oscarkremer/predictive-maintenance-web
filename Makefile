@@ -47,19 +47,10 @@ install:
 	@echo "---> Installing dependencies"
 	@conda env update -f environment.yml
 
-
 download: dirs
 	@echo "---> Updating raw data from S3"
 	@echo "---> It will take about 5 minutes.."
 	aws s3 cp s3://des-forecast/poc.csv data/raw/ 
-
-grid_search:
-	@echo "---> Running Grid search"
-	@$(PYTHON_INTERPRETER) src/api/grid_search.py --points-to-model $(POINTS_TO_MODEL) --start-point $(START_POINT) --end-point $(END_POINT)
-
-subtract:
-	echo "---> Subtracting"
-	$(PYTHON_INTERPRETER) src/api/subtract.py --start-point $(START_POINT) --end-point $(END_POINT) 
 
 pipeline:
 	@(yes | make download features predict)
