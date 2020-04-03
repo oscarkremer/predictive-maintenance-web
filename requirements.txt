@@ -1,7 +1,6 @@
 cffi==1.14.0
 chardet==3.0.4
 conda
-conda-package-handling
 cryptography==2.8
 cycler==0.10.0
 Cython==0.29.2
