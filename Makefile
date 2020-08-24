@@ -7,8 +7,6 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 BUCKET = predictive-maintenance-ifsul
 PROFILE = default
 PROJECT_NAME := predictive-maintenance-ifsul
-POINTS_TO_MODEL := 20
-FILTER_POINTS := 3
 PYTHON_INTERPRETER := python3
 START_POINT= 0
 END_POINT= 90
@@ -82,3 +80,7 @@ logs:
 check_environment:
 	@echo "---> Checking environment.."
 	@python3 test_environment.py
+
+webserver:
+	@echo "---> Running Webserver.."
+	@gunicorn app:app -b 0.0.0.0:8000
