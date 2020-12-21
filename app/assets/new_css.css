@@ -565,13 +565,20 @@ there.
     margin-bottom: 25px !important;
   }
   #individual_graph,
-  #count_graph,
+  #count_graph1,
+  #count_graph2,
+  #count_graph3,
   #aggregate_graph {
     position: static !important;
   }
   .container-display {
     display: flex;
   }
+
+  #temp,
+  #acel-x,
+  #acel-y,
+  #acel-z,
   #wells,
   #gas,
   #oil {

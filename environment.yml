@@ -28,6 +28,7 @@ dependencies:
     - matplotlib==2.2.3
     - gunicorn
     - setuptools
+    - pandas_datareader
     - WTForms
     - SQLAlchemy
     - Flask

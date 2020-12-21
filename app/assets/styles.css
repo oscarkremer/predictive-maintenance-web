@@ -69,8 +69,14 @@ body {
   height: calc(100% - 30px);
   width: calc(100% - 30px);
 }
-
-#countGraphContainer {
+#countGraphContainer1 {
+  flex: 5;
+  position: relative;
+}#countGraphContainer2 {
+  flex: 5;
+  position: relative;
+}
+#countGraphContainer3 {
   flex: 5;
   position: relative;
 }
@@ -108,6 +114,19 @@ body {
 }
 
 #wells {
+  flex: 1;
+}
+
+#temp {
+  flex: 1;
+}
+#acel-x {
+  flex: 1;
+}
+#acel-y {
+  flex: 1;
+}
+#acel-z {
   flex: 1;
 }
 

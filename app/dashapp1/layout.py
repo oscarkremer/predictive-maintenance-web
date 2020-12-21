@@ -11,8 +11,8 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
             ]),
             html.Div(id='title', className='one-half column', children=[
                 html.Div([
-                    html.H3('New York Oil and Gas', style={'margin-bottom': '0px'}),                   
-                    html.H5('Acelleration and Rotation', style={'margin-top': '0px'})
+                    html.H3('Predictive Maintenance Toolkit', style={'margin-bottom': '0px'}),                   
+                    html.H5('Acelleration and Rotation Module', style={'margin-top': '0px'})
                 ])
             ]),
             html.Div(className='one-third column', children=[
@@ -20,7 +20,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
             ])
         ]),
         html.Div(className='row flex-display', children=[
-            html.Div(id='cross-filter-options', className='pretty_container four columns', children=[
+            html.Div(id='cross-filter-options', className='pretty_container three columns', children=[
                 html.P('Filter by construction date (or select range in histogram',className='control_label'),
                 html.Div(id='year_slider', className='dcc_control', style={'padding': '0px 25px 25px'}, children=[
                     dcc.Slider(className='rc-slider', children=[
@@ -40,27 +40,72 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 html.Div(id='well_type_selector', className='dcc_control'),
                 html.Div(id='well_types', className='dcc_control')
             ]),
-            html.Div(id='right-column', className='eight columns', children=[
-                html.Div(id='info-container', className='row container-display'),
+            html.Div(id='right-column', className='nine columns', children=[
+                html.Div(id='gyroscopi-info', className='row container-display', children=[
+                    html.Div(id='wells', className='mini_container', children=[
+                        html.H6('2921', id='well_text'),
+                        html.P('Number of Wells')
+                    ]),
+                    html.Div(id='gas', className='mini_container', children=[
+                        html.H6('2921', id='gas_text'),
+                        html.P('Number of gas')
+                    ]),
+                    html.Div(id='oil', className='mini_container', children=[
+                        html.H6('2921', id='oil_text'),
+                        html.P('Number of oil')
+                    ]),
+                    html.Div(id='temp', className='mini_container', children=[
+                        html.H6('2921', id='temp_text'),
+                        html.P('Number of oil')
+                    ]),
+                    html.Div(id='acel-x', className='mini_container', children=[
+                        html.H6('2921', id='acel-x_text'),
+                        html.P('Number of oil')
+
+                    ]),
+                    html.Div(id='acel-y', className='mini_container', children=[
+                        html.H6('2921', id='acel-y_text'),
+                        html.P('Number of oil')
+
+                    ]),
+                    html.Div(id='acel-z', className='mini_container', children=[
+                        html.H6('2921', id='acel-z_text'),
+                        html.P('Number of oil')
+                    ])
+                ]),
                 html.Div(id='countGraphContainer', className='pretty_container', children=[
-                    html.Div(id='count_graph', className='dash-graph'),
-                    html.Div(className='js-plotly-plot', children=[
-                        dcc.Graph(id='example-s',
-                            figure={
-                                'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
-                                    {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'}]
-                        })])
+                    html.Div(id='count_graph1', className='dash-graph', children=[
+                        html.Div(className='js-plotly-plot', children=[
+                            dcc.Graph(id='example-s',
+                                figure={'layout': {
+                                        'title': 'Dash Data Visualization',
+                                        },
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 3'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 3'}]
+                            })])
+                    ])
                 ]),
                 html.Div(id='countGraphContainer2', className='pretty_container', children=[
-                    html.Div(id='count_graph2', className='dash-graph'),
-                    html.Div(className='js-plotly-plot', children=[
-                        dcc.Graph(id='example-s2',
-                            figure={
-                                'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
-                                    {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'}]
-                        })])
+                    html.Div(id='count_graph2', className='dash-graph', children=[
+                        html.Div(className='js-plotly-plot', children=[
+                            dcc.Graph(id='example-s2',
+                                figure={
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 3'}]
+                            })])
+                    ]),
+                ]),
+                html.Div(id='countGraphContainer3', className='pretty_container', children=[
+                    html.Div(id='count_graph3', className='dash-graph', children=[
+                        html.Div(className='js-plotly-plot', children=[
+                            dcc.Graph(id='example-s3',
+                                figure={
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Temperatura'}]
+                            })])
+                    ]),
                 ])
-
             ])
         ]),
         html.Div(className='row flex-display'),
