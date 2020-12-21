@@ -14,11 +14,9 @@ def register_dashapps(app):
     from app.dashapp1.callbacks import register_callbacks
     from app import db 
     from app.models import User
-    print(User.query.filter_by(username='oscar').first())
 
     # Meta tags for viewport responsiveness
     meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
-    print(get_root_path(__name__))
     dashapp1 = dash.Dash(__name__,
                          server=app,
                          url_base_pathname='/dashboard/',
@@ -28,7 +26,7 @@ def register_dashapps(app):
     with app.app_context():
         dashapp1.title = 'Dashapp 1'
         dashapp1.layout = layout
-#        register_callbacks(dashapp1)
+        register_callbacks(dashapp1)
 
     _protect_dashviews(dashapp1)
 

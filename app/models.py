@@ -19,4 +19,17 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
 
+class Measure(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    acel_x = db.Column(db.Float, nullable=False)
+    acel_y = db.Column(db.Float, nullable=False)
+    acel_z = db.Column(db.Float, nullable=False)
+    rot_x = db.Column(db.Float, nullable=False)
+    rot_y = db.Column(db.Float, nullable=False)
+    rot_z = db.Column(db.Float, nullable=False)
+    temperature = db.Column(db.Float, nullable=False)
+    def __repr__(self):
+        return f"Measure"
+
+
 db.create_all()

@@ -78,11 +78,11 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                         html.Div(className='js-plotly-plot', children=[
                             dcc.Graph(id='example-s',
                                 figure={'layout': {
-                                        'title': 'Dash Data Visualization',
+                                        'title': 'Acelleration - metters per second squared',
                                         },
-                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 3'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 3'}]
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Axis X'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Axis Y'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Axis Z'}]
                             })])
                     ])
                 ]),
@@ -90,10 +90,12 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                     html.Div(id='count_graph2', className='dash-graph', children=[
                         html.Div(className='js-plotly-plot', children=[
                             dcc.Graph(id='example-s2',
-                                figure={
-                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 1'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 2'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Pendulo 3'}]
+                                figure={'layout': {
+                                        'title': 'Rotation - radian per second',
+                                        },
+                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Eixo X'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Eixo Y'},
+                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Eixo Z'}]
                             })])
                     ]),
                 ]),
@@ -108,7 +110,16 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 ])
             ])
         ]),
-        html.Div(className='row flex-display'),
-        html.Div(className='row flex-display'),
-        html.Div(className='row flex-display')
+        html.Div(
+            html.Div([
+                html.H4('TERRA Satellite Live Feed'),
+                html.Div(id='live-update-text'),
+                dcc.Graph(id='live-update-graph'),
+                dcc.Interval(
+                    id='interval-component',
+                    interval=1*1000, # in milliseconds
+                    n_intervals=0
+                )
+            ])
+            )
     ])

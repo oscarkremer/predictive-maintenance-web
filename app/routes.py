@@ -41,6 +41,10 @@ def request_data():
     try:
         if pi_data:
             print(pi_data)
+            measure = Measure(acel_x=pi_data['AcX'], acel_y=pi_data['AcY'], acel_z=pi_data['AcZ'],
+                temperature=pi_data['Temperature'], rot_x=pi_data['GyX'], rot_y=pi_data['GyY'],rot_z=pi_data['GyZ'])
+            db.session.add(measure)
+            db.session.commit()
             return jsonify(pi_data)
         else:
             return jsonify({'status': 'ok'})
@@ -51,9 +55,7 @@ def request_data():
 @login_required
 def logout():
     logout_user()
-
     return redirect(url_for('index'))
-
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
