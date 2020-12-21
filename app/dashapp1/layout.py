@@ -1,5 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
+from app import db
+from app.models import *
 
 layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction": "column"}, children=
     [

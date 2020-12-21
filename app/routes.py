@@ -1,11 +1,5 @@
-from flask import redirect
-from flask import render_template
-from flask import request, jsonify
-from flask import url_for, flash
-from flask_login import current_user
-from flask_login import login_required
-from flask_login import login_user
-from flask_login import logout_user
+from flask import redirect, render_template, request, jsonify, url_for, flash
+from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
 from app import app, db, bcrypt
 from app.forms import *
@@ -15,12 +9,14 @@ from time import sleep
 import requests, json, atexit, time
 
 
-@app.route('/')
+@app.route('/')import dash_html_components as html
+
 def index():
     return render_template("index.html", title='Home Page')
 
 @app.route('/login/', methods=['GET', 'POST'])
-def login():
+def login():import dash_html_components as html
+
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()

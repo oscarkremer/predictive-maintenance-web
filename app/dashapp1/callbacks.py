@@ -1,13 +1,19 @@
 from datetime import datetime as dt
 
 import pandas_datareader as pdr
+import plotly
 from dash.dependencies import Input
 from dash.dependencies import Output
-
+from pyorbital.orbital import Orbital
+satellite = Orbital('TERRA')
+import datetime
+import dash_html_components as html
 
 def register_callbacks(dashapp):
     @dashapp.callback(Output('live-update-text', 'children'),
-              Input('interval-component', 'n_intervals'))
+              [Input('interval-component', 'n_intervals')])
+
+
     def update_metrics(n):
         lon, lat, alt = satellite.get_lonlatalt(datetime.datetime.now())
         style = {'padding': '5px', 'fontSize': '16px'}
@@ -16,11 +22,9 @@ def register_callbacks(dashapp):
             html.Span('Latitude: {0:.2f}'.format(lat), style=style),
             html.Span('Altitude: {0:0.2f}'.format(alt), style=style)
         ]
-
-
-    # Multiple components can update everytime interval gets fired.
+    
     @dashapp.callback(Output('live-update-graph', 'figure'),
-                Input('interval-component', 'n_intervals'))
+                [Input('interval-component', 'n_intervals')])
     def update_graph_live(n):
         satellite = Orbital('TERRA')
         data = {
