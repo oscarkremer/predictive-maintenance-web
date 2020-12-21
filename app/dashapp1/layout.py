@@ -101,18 +101,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                             })])
                     ]),
                 ]),
-                html.Div(id='countGraphContainer3', className='pretty_container', children=[
-                    html.Div(id='count_graph3', className='dash-graph', children=[
-                        html.Div(className='js-plotly-plot', children=[
-                            dcc.Graph(id='example-s3',
-                                figure={
-                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Temperatura'}]
-                            })])
-                    ]),
-                ])
-            ])
-        ]),
-        html.Div(
+                        html.Div(
             html.Div([
                 html.H4('TERRA Satellite Live Feed'),
                 html.Div(id='live-update-text'),
@@ -123,5 +112,8 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                     n_intervals=0
                 )
             ])
-            )
+        )
+
+            ])
+        ]),
     ])

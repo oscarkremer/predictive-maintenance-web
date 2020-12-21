@@ -5,38 +5,28 @@ import plotly
 from dash.dependencies import Input
 from dash.dependencies import Output
 from pyorbital.orbital import Orbital
-satellite = Orbital('TERRA')
-import datetime
+from datetime import datetime, timedelta
 import dash_html_components as html
+from app.models import *
 
 def register_callbacks(dashapp):
-    @dashapp.callback(Output('live-update-text', 'children'),
-              [Input('interval-component', 'n_intervals')])
-
-
-    def update_metrics(n):
-        lon, lat, alt = satellite.get_lonlatalt(datetime.datetime.now())
-        style = {'padding': '5px', 'fontSize': '16px'}
-        return [
-            html.Span('Longitude: {0:.2f}'.format(lon), style=style),
-            html.Span('Latitude: {0:.2f}'.format(lat), style=style),
-            html.Span('Altitude: {0:0.2f}'.format(alt), style=style)
-        ]
-    
     @dashapp.callback(Output('live-update-graph', 'figure'),
                 [Input('interval-component', 'n_intervals')])
     def update_graph_live(n):
-        satellite = Orbital('TERRA')
         data = {
             'time': [],
             'Latitude': [],
             'Longitude': [],
             'Altitude': []
         }
+        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(days=5)).order_by(Measure.id)
+        for measure in measures:
+            print(measure.acel_x)
 
         # Collect some data
+
         for i in range(180):
-            time = datetime.datetime.now() - datetime.timedelta(seconds=i*20)
+            time = datetime.now() - timedelta(seconds=i*20)
             lon, lat, alt = satellite.get_lonlatalt(
                 time
             )
