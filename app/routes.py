@@ -45,7 +45,6 @@ def request_data():
         else:
             return jsonify({'status': 'ok'})
     except Exception as e:
-        print(e)
         return jsonify({'status': 'error'})
    
 @app.route('/logout/')

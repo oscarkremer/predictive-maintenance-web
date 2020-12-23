@@ -43,77 +43,41 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 html.Div(id='well_types', className='dcc_control')
             ]),
             html.Div(id='right-column', className='nine columns', children=[
-                html.Div(id='gyroscopi-info', className='row container-display', children=[
-                    html.Div(id='wells', className='mini_container', children=[
-                        html.H6('2921', id='well_text'),
-                        html.P('Number of Wells')
-                    ]),
-                    html.Div(id='gas', className='mini_container', children=[
-                        html.H6('2921', id='gas_text'),
-                        html.P('Number of gas')
-                    ]),
-                    html.Div(id='oil', className='mini_container', children=[
-                        html.H6('2921', id='oil_text'),
-                        html.P('Number of oil')
-                    ]),
-                    html.Div(id='temp', className='mini_container', children=[
-                        html.H6('2921', id='temp_text'),
-                        html.P('Number of oil')
-                    ]),
-                    html.Div(id='acel-x', className='mini_container', children=[
-                        html.H6('2921', id='acel-x_text'),
-                        html.P('Number of oil')
-
-                    ]),
-                    html.Div(id='acel-y', className='mini_container', children=[
-                        html.H6('2921', id='acel-y_text'),
-                        html.P('Number of oil')
-
-                    ]),
-                    html.Div(id='acel-z', className='mini_container', children=[
-                        html.H6('2921', id='acel-z_text'),
-                        html.P('Number of oil')
-                    ])
-                ]),
-                html.Div(id='countGraphContainer', className='pretty_container', children=[
-                    html.Div(id='count_graph1', className='dash-graph', children=[
-                        html.Div(className='js-plotly-plot', children=[
-                            dcc.Graph(id='example-s',
-                                figure={'layout': {
-                                        'title': 'Acelleration - metters per second squared',
-                                        },
-                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Axis X'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Axis Y'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Axis Z'}]
-                            })])
-                    ])
-                ]),
-                html.Div(id='countGraphContainer2', className='pretty_container', children=[
-                    html.Div(id='count_graph2', className='dash-graph', children=[
-                        html.Div(className='js-plotly-plot', children=[
-                            dcc.Graph(id='example-s2',
-                                figure={'layout': {
-                                        'title': 'Rotation - radian per second',
-                                        },
-                                    'data': [{'x':[1,2,3,4,5,6,7,8,9,10], 'y':[24,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Eixo X'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Eixo Y'},
-                                        {'x':[1,2,3,4,5,6,7,8,9,10], 'y':[25,24,24,25,26,24,24,24,25,26], 'type':'line', 'name': 'Eixo Z'}]
-                            })])
-                    ]),
-                ]),
-                        html.Div(
-            html.Div([
-                html.H4('TERRA Satellite Live Feed'),
-                html.Div(id='live-update-text'),
-                dcc.Graph(id='live-update-graph'),
+                html.Div(id='text-output', className='row container-display'),
                 dcc.Interval(
-                    id='interval-component',
-                    interval=1*1000, # in milliseconds
+                    id='interval-text',
                     n_intervals=0
+                ),
+                html.Div(
+                    html.Div([
+                        html.H4('Acelleration Graphs'),
+                        dcc.Graph(id='live-acelleration-graph'),
+                        dcc.Interval(
+                            id='interval-acelleration',
+                            n_intervals=0
+                        )
+                    ])
+                ),
+                html.Div(
+                    html.Div([
+                        html.H4('Rotation Graphs'),
+                        dcc.Graph(id='live-rotation-graph'),
+                        dcc.Interval(
+                            id='interval-rotation',
+                            n_intervals=0
+                        )
+                    ])
+                ),
+                html.Div(
+                    html.Div([
+                        html.H4('Temperature Graphs'),
+                        dcc.Graph(id='live-temperature-graph'),
+                        dcc.Interval(
+                            id='interval-temperature',
+                            n_intervals=0
+                        )
+                    ])
                 )
-            ])
-        )
-
             ])
         ]),
     ])

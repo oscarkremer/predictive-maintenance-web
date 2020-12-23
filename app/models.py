@@ -28,7 +28,7 @@ class Measure(db.Model, UserMixin):
     rot_y = db.Column(db.Float, nullable=False)
     rot_z = db.Column(db.Float, nullable=False)
     temperature = db.Column(db.Float, nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     def __repr__(self):
         return f"Measure"
 
