@@ -80,7 +80,8 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                         value=5,
                         marks={str(year): str(year) for year in range(1,11)},
                         step=None
-                )
+                ),
+                html.H6('Anomalies Statistics', className='control_label')
             ]),
             html.Div(id='right-column', className='eight columns', children=[
                 html.Div(id='text-output', className='row container-display'),

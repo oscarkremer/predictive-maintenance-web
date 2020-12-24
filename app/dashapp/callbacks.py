@@ -62,7 +62,7 @@ def register_callbacks(dashapp):
             'rotation_y': [],
             'rotation_z': []
         }
-        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=10)).order_by(Measure.id)
+        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=100)).order_by(Measure.id)
         for measure in measures:
             if yaxis_column_name=='Rotation':
                 data['rotation_x'].append(measure.rot_x)
@@ -83,7 +83,7 @@ def register_callbacks(dashapp):
                 mode= 'lines+markers',
                 line_shape='spline'
             ) 
-            return {'data': [data]} 
+            return {'data': [data], 'layout':{'margin': {'t': 10, 'r': 10, 'b':50}}} 
         if yaxis_column_name=='Acelleration':
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
@@ -106,7 +106,7 @@ def register_callbacks(dashapp):
                 mode= 'lines+markers',
                 line_shape='spline'
             ) 
-            return {'data': [data1,data2,data3]} 
+            return {'data': [data1,data2,data3], 'layout':{'margin': {'t': 0, 'b':0, 'r':0,'l':0}}} 
         if yaxis_column_name=='Rotation':
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
@@ -126,10 +126,10 @@ def register_callbacks(dashapp):
                 x=list(data['time']), 
                 y=list(data['rotation_z']), 
                 name='X - Axis', 
-                mode= 'lines+markers',
+                mode= 'lines',
                 line_shape='spline'
             ) 
-            return {'data': [data1,data2,data3]} 
+            return {'data': [data1,data2,data3], 'layout':{'margin': {'t': 0, 'b':0, 'r':0,'l':0}}} 
 
     @dashapp.callback(
         Output('indicator-graphic-online', 'figure'),
@@ -137,13 +137,14 @@ def register_callbacks(dashapp):
         Input('xaxis-type-online', 'value'),
         Input('yaxis-type-online', 'value'),        
         Input('interval-online-graphic', 'n_intervals')])
-    def update_graph(yaxis_column_name, xaxis_type, yaxis_type, n):
+    def update_graph_online(yaxis_column_name, xaxis_type, yaxis_type, n):
         if yaxis_column_name == 'Rotation':
             data = {
                 'time': [],
                 'rotation_x': [],
                 'rotation_y': [],
-                'rotation_z': []
+                'rotation_z': [],
+                'std': []
             }
             measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=10)).order_by(Measure.id)
             for measure in measures:
@@ -151,31 +152,105 @@ def register_callbacks(dashapp):
                 data['rotation_y'].append(measure.rot_y)
                 data['rotation_z'].append(measure.rot_z)
                 data['time'].append(measure.date)
-            data1 = plotly.graph_objs.Scatter( 
-                x=list(data['time']), 
-                y=list(data['rotation_x']), 
-                name='X - Axis', 
-                mode= 'lines'
-            ) 
-            data2 = plotly.graph_objs.Scatter( 
-                x=list(data['time']), 
-                y=list(data['rotation_y']), 
-                name='X - Axis', 
-                mode= 'lines'
-            ) 
-            data3 = plotly.graph_objs.Scatter( 
-                x=list(data['time']), 
-                y=list(data['rotation_z']), 
-                name='X - Axis',
-                mode= 'lines'
-            ) 
-            return {'data': [data1,data2,data3]} 
+                data['std'].append(0.1)
+            df = pd.DataFrame.from_dict(data)
+            print(df)
+            data1 = [
+                go.Scatter(
+                    name='Rotation X',
+                    x=df['time'],
+                    y=df['rotation_x'],
+                    mode='lines',
+                    line=dict(color='rgb(177, 119, 51)', width=0.75),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Upper Bound',
+                    x=df['time'],
+                    y=df['rotation_x']+df['std'],
+                    mode='lines',
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Lower Bound',
+                    x=df['time'],
+                    y=df['rotation_x']-df['std'],
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    mode='lines',
+                    fillcolor='rgba(177, 119, 51, 0.3)',
+                    fill='tonexty',
+                    showlegend=False
+                )]
+            data2 = [
+                go.Scatter(
+                    name='Rotation Y',
+                    x=df['time'],
+                    y=df['rotation_y'],
+                    mode='lines',
+                    line=dict(color='rgb(137, 209, 255)', width=0.75),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Upper Bound',
+                    x=df['time'],
+                    y=df['rotation_y']+df['std'],
+                    mode='lines',
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Lower Bound',
+                    x=df['time'],
+                    y=df['rotation_y']-df['std'],
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    mode='lines',
+                    fillcolor='rgba(137, 209, 255, 0.3)',
+                    fill='tonexty',
+                    showlegend=False
+                )]
+            data3 = [
+                go.Scatter(
+                    name='Rotation Z',
+                    x=df['time'],
+                    y=df['rotation_z'],
+                    mode='lines',
+                    line=dict(color='rgb(0, 255, 0)', width=0.75),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Upper Bound',
+                    x=df['time'],
+                    y=df['rotation_z']+df['std'],
+                    mode='lines',
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Lower Bound',
+                    x=df['time'],
+                    y=df['rotation_z']-df['std'],
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    mode='lines',
+                    fillcolor='rgba(0, 255, 0, 0.3)',
+                    fill='tonexty',
+                    showlegend=False
+                )]
+
+            return {'data': data1+data2+data3} 
         if yaxis_column_name == 'Acelleration':
             data = {
                 'time': [],
                 'acelleration_x': [],
                 'acelleration_y': [],
-                'acelleration_z': []
+                'acelleration_z': [],
+                'std': []
             }
             measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=10)).order_by(Measure.id)
             for measure in measures:
@@ -183,25 +258,97 @@ def register_callbacks(dashapp):
                 data['acelleration_y'].append(measure.acel_y)
                 data['acelleration_z'].append(measure.acel_z)
                 data['time'].append(measure.date)
-            data1 = plotly.graph_objs.Scatter( 
-                x=list(data['time']), 
-                y=list(data['acelleration_x']), 
-                name='X - Axis', 
-                mode= 'lines'
-            )
-            data2 = plotly.graph_objs.Scatter( 
-                x=list(data['time']), 
-                y=list(data['acelleration_y']), 
-                name='X - Axis', 
-                mode= 'lines'
-            )
-            data3 = plotly.graph_objs.Scatter( 
-                x=list(data['time']), 
-                y=list(data['acelleration_z']), 
-                name='X - Axis', 
-                mode= 'lines'
-            )
-            return {'data': [data1,data2,data3]} 
+                data['std'].append(0.1)
+
+            df = pd.DataFrame.from_dict(data)
+            data1 = [
+                go.Scatter(
+                    name='Acelleration X',
+                    x=df['time'],
+                    y=df['acelleration_x'],
+                    mode='lines',
+                    line=dict(color='rgb(177, 119, 51)', width=0.75),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Upper Bound',
+                    x=df['time'],
+                    y=df['acelleration_x']+df['std'],
+                    mode='lines',
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Lower Bound',
+                    x=df['time'],
+                    y=df['acelleration_x']-df['std'],
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    mode='lines',
+                    fillcolor='rgba(177, 119, 51, 0.3)',
+                    fill='tonexty',
+                    showlegend=False
+                )]
+            data2 = [
+                go.Scatter(
+                    name='Acelleration Y',
+                    x=df['time'],
+                    y=df['acelleration_y'],
+                    mode='lines',
+                    line=dict(color='rgb(137, 209, 255)', width=0.75),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Upper Bound',
+                    x=df['time'],
+                    y=df['acelleration_y']+df['std'],
+                    mode='lines',
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Lower Bound',
+                    x=df['time'],
+                    y=df['acelleration_y']-df['std'],
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    mode='lines',
+                    fillcolor='rgba(137, 209, 255, 0.3)',
+                    fill='tonexty',
+                    showlegend=False
+                )]
+            data3 = [
+                go.Scatter(
+                    name='Acelleration Z',
+                    x=df['time'],
+                    y=df['acelleration_z'],
+                    mode='lines',
+                    line=dict(color='rgb(0, 255, 0)', width=0.75),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Upper Bound',
+                    x=df['time'],
+                    y=df['acelleration_z']+df['std'],
+                    mode='lines',
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    showlegend=False
+                ),
+                go.Scatter(
+                    name='Lower Bound',
+                    x=df['time'],
+                    y=df['acelleration_z']-df['std'],
+                    marker=dict(color="#444"),
+                    line=dict(width=0),
+                    mode='lines',
+                    fillcolor='rgba(0, 255, 0, 0.3)',
+                    fill='tonexty',
+                    showlegend=False
+                )]
+            return {'data': data1+data2+data3} 
         if yaxis_column_name == 'Temperature':    
             data = {
                 'time': [],
@@ -214,13 +361,13 @@ def register_callbacks(dashapp):
                 data['time'].append(measure.date)
                 data['std'].append(0.1)
             df = pd.DataFrame.from_dict(data)
-            fig = go.Figure([
+            fig = {'data': [
                 go.Scatter(
                     name='Measurement',
                     x=df['time'],
                     y=df['temperature'],
                     mode='lines',
-                    line=dict(color='rgb(31, 119, 180)'),
+                    line=dict(color='rgb(137, 209, 255)', width=0.75),
                     showlegend=False
                 ),
                 go.Scatter(
@@ -239,14 +386,10 @@ def register_callbacks(dashapp):
                     marker=dict(color="#444"),
                     line=dict(width=0),
                     mode='lines',
-                    fillcolor='rgba(68, 68, 68, 0.3)',
+                    fillcolor='rgba(137, 209, 255, 0.3)',
                     fill='tonexty',
                     showlegend=False
                 )
-            ])
-            fig.update_layout(
-                yaxis_title='Temperature (°C)',
-                title='Continuous, variable value error bars',
-                hovermode="x"
-            )
+            ]}           
+            fig['layout'] = {'yaxis_title':'Temperature (°C)', 'hovermode': 'x'}
             return fig

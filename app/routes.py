@@ -26,7 +26,7 @@ def login():
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(
-                'http://127.0.0.1:8000/dashboard', code=302)
+                'http://0.0.0.0:8000/dashboard', code=302)
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
