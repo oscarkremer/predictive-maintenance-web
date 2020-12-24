@@ -24,26 +24,26 @@ def register_callbacks(dashapp):
     def update_output_div(n):
         measure = Measure.query.order_by(Measure.id.desc()).first()
         return  [html.Div(id='acel-x', className='mini_container', children=[
-            html.H6(np.round(measure.acel_x, 3), id='well_text'),
+            html.H6(np.round(measure.acel_x, 3), id='acel-x_text'),
             html.P('m/s² - Axis X')]),
         html.Div(id='acel-y', className='mini_container', children=[
-            html.H6(np.round(measure.acel_y, 3), id='gas_text'),
+            html.H6(np.round(measure.acel_y, 3), id='acel-y_text'),
             html.P('m/s² - Axis Y')]),
         html.Div(id='acel-z', className='mini_container', children=[
-            html.H6(np.round(measure.acel_z, 3), id='oil_text'),
+            html.H6(np.round(measure.acel_z, 3), id='acel-z_text'),
             html.P('m/s² - Axis Z')]),
-        html.Div(id='temp', className='mini_container', children=[
-            html.H6(np.round(measure.rot_x, 3), id='temp_text'),
-            html.P('m/s² - Axis X')]),
-        html.Div(id='wells', className='mini_container', children=[
-            html.H6(np.round(measure.rot_y, 3), id='acel-x_text'),
-            html.P('Number of oil')]),
-        html.Div(id='gas', className='mini_container', children=[
-            html.H6(np.round(measure.rot_z, 3), id='acel-y_text'),
-            html.P('Number of oil')]),
         html.Div(id='oil', className='mini_container', children=[
-            html.H6(np.round(measure.temperature, 3), id='acel-z_text'),
-            html.P('Number of oil')])]
+            html.H6(np.round(measure.rot_x, 3), id='oil_text'),
+            html.P('rad/s - Axis X')]),
+        html.Div(id='wells', className='mini_container', children=[
+            html.H6(np.round(measure.rot_y, 3), id='well_text'),
+            html.P('rad/s - Axis Y')]),
+        html.Div(id='gas', className='mini_container', children=[
+            html.H6(np.round(measure.rot_z, 3), id='gas_text'),
+            html.P('rad/s - Axis Z')]),
+        html.Div(id='temp', className='mini_container', children=[
+            html.H6(np.round(measure.temperature, 3), id='temp_text'),
+            html.P('°C')])]
         
     @dashapp.callback(
         Output('indicator-graphic', 'figure'),
@@ -136,9 +136,8 @@ def register_callbacks(dashapp):
         [Input('yaxis-column-online', 'value'),
         Input('xaxis-type-online', 'value'),
         Input('yaxis-type-online', 'value'),        
-        Input('year--slider-online', 'value'),
         Input('interval-online-graphic', 'n_intervals')])
-    def update_graph(yaxis_column_name, xaxis_type, yaxis_type,year_value, n):
+    def update_graph(yaxis_column_name, xaxis_type, yaxis_type, n):
         if yaxis_column_name == 'Rotation':
             data = {
                 'time': [],

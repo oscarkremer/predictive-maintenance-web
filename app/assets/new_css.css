@@ -599,6 +599,10 @@ there.
     position: relative;
     box-shadow: 2px 2px 2px lightgrey;
   }
+  #plotly-image1 {
+    margin-bottom: 0px !important;
+    height: 45px !important;
+  }
   #plotly-image {
     margin-bottom: 0px !important;
     height: 45px !important;
