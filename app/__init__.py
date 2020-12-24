@@ -10,25 +10,25 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
 def register_dashapps(app):
-    from app.dashapp1.layout import layout
-    from app.dashapp1.callbacks import register_callbacks
+    from app.dashapp.layout import layout
+    from app.dashapp.callbacks import register_callbacks
     from app import db 
     from app.models import User
 
     # Meta tags for viewport responsiveness
     meta_viewport = {"name": "viewport", "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
-    dashapp1 = dash.Dash(__name__,
+    dashapp = dash.Dash(__name__,
                          server=app,
                          url_base_pathname='/dashboard/',
                          assets_folder=get_root_path(__name__) + '/assets/',
                          meta_tags=[meta_viewport])
 
     with app.app_context():
-        dashapp1.title = 'Dashapp 1'
-        dashapp1.layout = layout
-        register_callbacks(dashapp1)
+        dashapp.title = 'Dashapp 1'
+        dashapp.layout = layout
+        register_callbacks(dashapp)
 
-    _protect_dashviews(dashapp1)
+    _protect_dashviews(dashapp)
 
 
 def _protect_dashviews(dashapp):

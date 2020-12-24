@@ -36,7 +36,6 @@ def request_data():
     pi_data = request.json
     try:
         if pi_data:
-            print(pi_data)
             measure = Measure(acel_x=pi_data['AcX'], acel_y=pi_data['AcY'], acel_z=pi_data['AcZ'],
                 temperature=pi_data['Temperature'], rot_x=pi_data['GyX'], rot_y=pi_data['GyY'],rot_z=pi_data['GyZ'])
             db.session.add(measure)
