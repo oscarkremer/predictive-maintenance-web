@@ -3,9 +3,6 @@ import dash_html_components as html
 from app import db
 from app.models import *
 import pandas as pd
-df = pd.read_csv('https://plotly.github.io/datasets/country_indicators.csv')
-
-available_indicators = df['Indicator Name'].unique()
 
 layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction": "column"}, children=
     [
@@ -89,7 +86,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                     id='interval-text',
                     n_intervals=0
                 ),
-                html.Div(className='pretty_container', children=[
+                html.Div(className='pretty_container',children=[
                     dcc.Graph(id='indicator-graphic-online'),
                     dcc.Interval(
                         id='interval-online-graphic',

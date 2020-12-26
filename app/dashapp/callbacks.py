@@ -79,47 +79,53 @@ def register_callbacks(dashapp):
             data = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['temperature']), 
-                name='X - Axis', 
-                mode= 'lines+markers',
+                name='Temperature', 
+                mode= 'lines',
+                line=dict(color='rgb(137, 209, 255)', width=0.75),
                 line_shape='spline'
             ) 
-            return {'data': [data], 'layout':{'margin': {'t': 10, 'r': 10, 'b':50}}} 
+            return {'data': [data], 'layout':{'yaxis': {'height': 350, 'title': {'text': 'Temperature (°C)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name=='Acelleration':
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['acelleration_x']), 
                 name='X - Axis', 
-                mode= 'lines+markers',
+                mode= 'lines',
+                line=dict(color='rgb(177, 119, 51)', width=0.75),
                 line_shape='spline'
             ) 
             data2 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['acelleration_y']), 
                 name='X - Axis', 
-                mode= 'lines+markers',
+                mode= 'lines',
+                line=dict(color='rgb(137, 209, 255)', width=0.75),
                 line_shape='spline'
             ) 
             data3 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['acelleration_z']), 
                 name='X - Axis', 
-                mode= 'lines+markers',
+                mode= 'lines',
+                line=dict(color='rgb(0, 255, 0)', width=0.75),
                 line_shape='spline'
             ) 
-            return {'data': [data1,data2,data3], 'layout':{'margin': {'t': 0, 'b':0, 'r':0,'l':0}}} 
+            return {'data': [data1,data2,data3], 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acelleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name=='Rotation':
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['rotation_x']), 
                 name='X - Axis', 
-                mode= 'lines+markers',
+                mode= 'lines',
+                line=dict(color='rgb(177, 119, 51)', width=0.75),
                 line_shape='spline'
             ) 
             data2 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['rotation_y']), 
                 name='X - Axis', 
-                mode= 'lines+markers',
+                mode= 'lines',
+                line=dict(color='rgb(137, 209, 255)', width=0.75),
                 line_shape='spline'
             ) 
             data3 = plotly.graph_objs.Scatter( 
@@ -127,9 +133,10 @@ def register_callbacks(dashapp):
                 y=list(data['rotation_z']), 
                 name='X - Axis', 
                 mode= 'lines',
+                line=dict(color='rgb(0, 255, 0)', width=0.75),
                 line_shape='spline'
             ) 
-            return {'data': [data1,data2,data3], 'layout':{'margin': {'t': 0, 'b':0, 'r':0,'l':0}}} 
+            return {'data': [data1,data2,data3], 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Rotation (rad/s)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
 
     @dashapp.callback(
         Output('indicator-graphic-online', 'figure'),
@@ -154,7 +161,6 @@ def register_callbacks(dashapp):
                 data['time'].append(measure.date)
                 data['std'].append(0.1)
             df = pd.DataFrame.from_dict(data)
-            print(df)
             data1 = [
                 go.Scatter(
                     name='Rotation X',
@@ -243,7 +249,7 @@ def register_callbacks(dashapp):
                     showlegend=False
                 )]
 
-            return {'data': data1+data2+data3} 
+            return {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Rotation (rad/s)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name == 'Acelleration':
             data = {
                 'time': [],
@@ -348,7 +354,7 @@ def register_callbacks(dashapp):
                     fill='tonexty',
                     showlegend=False
                 )]
-            return {'data': data1+data2+data3} 
+            return {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acelleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name == 'Temperature':    
             data = {
                 'time': [],
@@ -361,7 +367,7 @@ def register_callbacks(dashapp):
                 data['time'].append(measure.date)
                 data['std'].append(0.1)
             df = pd.DataFrame.from_dict(data)
-            fig = {'data': [
+            data = [
                 go.Scatter(
                     name='Measurement',
                     x=df['time'],
@@ -390,6 +396,5 @@ def register_callbacks(dashapp):
                     fill='tonexty',
                     showlegend=False
                 )
-            ]}           
-            fig['layout'] = {'yaxis_title':'Temperature (°C)', 'hovermode': 'x'}
-            return fig
+            ]       
+            return {'data': data, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Temperature (°C)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
