@@ -12,10 +12,6 @@ import dash_html_components as html
 from app.models import *
 
 
-df = pd.read_csv('https://plotly.github.io/datasets/country_indicators.csv')
-
-available_indicators = df['Indicator Name'].unique()
-
 def register_callbacks(dashapp):
     @dashapp.callback(
         Output(component_id='text-output', component_property='children'),
@@ -398,3 +394,24 @@ def register_callbacks(dashapp):
                 )
             ]       
             return {'data': data, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Temperature (°C)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
+
+
+    @dashapp.callback(Output('variables-pie', 'figure'),
+        [Input('interval-pie-graphic', 'n_intervals')])
+    def update_pie_graph_online(n):
+        df = px.data.gapminder().query("continent == 'Asia'")
+        fig = px.pie(df, values='pop', names='country')
+        fig.update_traces(textposition='inside')
+        fig.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+        return fig
+
+    @dashapp.callback(Output('anomalies-pie', 'figure'),
+        [Input('interval-anomalie-graphic', 'n_intervals')])
+    def update_pie_graph_online(n):
+        data = {'variables': ['acelleration', 'rotation', 'temperature'], 'values': [10, 12, 2]}
+        df = pd.DataFrame.from_dict(data)
+        fig = px.pie(df, values='values', names='variables')
+        fig.update_traces(textposition='inside')
+        fig.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
+        return fig
+

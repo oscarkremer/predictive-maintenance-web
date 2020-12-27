@@ -3,6 +3,8 @@ import dash_html_components as html
 from app import db
 from app.models import *
 import pandas as pd
+import dash_table
+df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 
 layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction": "column"}, children=
     [
@@ -78,7 +80,33 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                         marks={str(year): str(year) for year in range(1,11)},
                         step=None
                 ),
-                html.H6('Anomalies Statistics', className='control_label')
+                html.H6('Anomalies Statistics', className='control_label'),
+                html.Div(className='table', children=[
+                    html.Tr(children=[
+                        html.Th('Date'),
+                        html.Th('Anomaly Type')
+                        ]),
+                    html.Tr(children=[
+                        html.Td('10/31/2020 20:31:21'),
+                        html.Td('Frequency'),
+                    ]),
+                    html.Tr(children=[
+                        html.Td('10/31/2020 20:33:21'),
+                        html.Td('Outlier'),
+                    ]),
+                    html.Tr(children=[
+                        html.Td('10/31/2020 20:31:21'),
+                        html.Td('Frequency'),
+                    ]),
+                    html.Tr(children=[
+                        html.Td('10/31/2020 20:33:21'),
+                        html.Td('Outlier'),
+                    ]),
+                    html.Tr(children=[
+                        html.Td('10/31/2020 20:33:21'),
+                        html.Td('HTM'),
+                    ])
+                ]),
             ]),
             html.Div(id='right-column', className='eight columns', children=[
                 html.Div(id='text-output', className='row container-display'),
@@ -98,4 +126,24 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
             ])
             ])
         ]),
+        html.Div(className='row flex-display', children=[
+            html.Div(className='six columns', children=[
+                html.Div(className='pretty_container', children=[
+                    dcc.Graph(id='anomalies-pie'),
+                    dcc.Interval(
+                        id='interval-anomalie-graphic',
+                        n_intervals=0
+                        )                    
+                ])
+            ]),
+            html.Div(className='six columns', children=[
+                html.Div(className='pretty_container', children=[
+                    dcc.Graph(id='variables-pie'),
+                    dcc.Interval(
+                        id='interval-pie-graphic',
+                        n_intervals=0
+                        )
+                ])
+            ])
+        ])
     ])

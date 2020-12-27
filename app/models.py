@@ -35,13 +35,8 @@ class Measure(db.Model, UserMixin):
 
 class Anomaly(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    variable = db.Column(db.Float, nullable=False)
-    acel_y = db.Column(db.Float, nullable=False)
-    acel_z = db.Column(db.Float, nullable=False)
-    rot_x = db.Column(db.Float, nullable=False)
-    rot_y = db.Column(db.Float, nullable=False)
-    rot_z = db.Column(db.Float, nullable=False)
-    temperature = db.Column(db.Float, nullable=False)
+    variable = db.Column(db.String(30), nullable=False)
+    behavior = db.Column(db.String(30), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     def __repr__(self):
         return f"Measure"
