@@ -1,4 +1,5 @@
-from htm.bindings.algorithms import *
+from .algorithms import *
+
 __all__ = [
     'SpatialPooler',
     'TemporalMemory',

@@ -115,7 +115,7 @@ import math
 import numbers
 import numpy
 
-from htm.utils import MovingAverage
+from src.htm.utils import MovingAverage
 
 class AnomalyLikelihood:
   """
