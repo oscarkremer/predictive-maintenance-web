@@ -11,7 +11,6 @@ import requests, json, atexit, time
 
 
 @app.route('/')
-
 def index():
     return render_template("index.html", title='Home Page')
 

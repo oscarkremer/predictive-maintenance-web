@@ -39,6 +39,6 @@ class Anomaly(db.Model, UserMixin):
     behavior = db.Column(db.String(30), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     def __repr__(self):
-        return f"Measure"
+        return f"Anomaly"
 
 db.create_all()

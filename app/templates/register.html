@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "init_layout.html" %}
 {% block content %}
     <div id="particles-js"></div>
     <div id="overlay">
@@ -6,7 +6,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
+                <legend class="border-bottom mb-4">Cadastre-se Hoje</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
                     {% if form.username.errors %}
@@ -66,12 +66,9 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
+                Já possui uma conta? <a class="ml-2" href="{{ url_for('login') }}">Login</a>
             </small>
         </div>
     </div>
     </div>
 {% endblock content %}
-
-
-

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "init_layout.html" %}
 {% block content %}
     <div id="particles-js"></div>
     <div id="overlay">
@@ -44,12 +44,12 @@
                 {{ form.submit(class="btn btn-secondary btn-lg btn-block") }}
             </div>
             <small class="text-muted ml-1">
-                <a href="/help">Forgot Password?</a>
+                <a href="/help">Esqueceu a senha?</a>
             </small>
         </form>
         <div class="border-top ml-1">
             <small class="text-muted">
-                Need An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up Now</a>
+                Quer uma conta? <a class="ml-2" href="{{ url_for('register') }}">Cadastre-se Agora</a>
             </small>
         </div>        
     </div>

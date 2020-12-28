@@ -10,7 +10,7 @@
           "type":"circle",
           "stroke":{
               "width":1,
-              "color":"#ccc"
+              "color":"black"
           }
       },
       "opacity":{
@@ -21,12 +21,12 @@
           "value":1
       },
       "line_linked":{
-          "enable":true,
+          "enable":false,
           "distance":110
       },
       "move":{
           "enable":true,
-          "speed": 1
+          "speed": 2
       }
   }
 }
