@@ -6,7 +6,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Cadastre-se Hoje</legend>
+                <legend class="border-bottom mb-4">Sign Up Today</legend>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}
                     {% if form.username.errors %}
@@ -66,7 +66,7 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                Já possui uma conta? <a class="ml-2" href="{{ url_for('login') }}">Login</a>
+                Already have an account? <a class="ml-2" href="{{ url_for('login') }}">Login</a>
             </small>
         </div>
     </div>

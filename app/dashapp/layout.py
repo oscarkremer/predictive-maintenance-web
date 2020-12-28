@@ -29,18 +29,18 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
         html.Div(className='row flex-display', children=[
             html.Div(id='cross-filter-options', className='pretty_container four columns', children=[
                 html.H6('Online Graphic', className='control_label'),
-                html.P('Filter by well status', className='control_label'),
+                html.P('Select readings in the last', className='control_label'),
                 dcc.RadioItems(
                     id='xaxis-type-online',
-                    options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                    value='Linear',
+                    options=[{'label': i, 'value': i} for i in ['1 minute', '2 minutes', '5 minutes', '10 minutes']],
+                    value='1 minute',
                     labelStyle={'display': 'inline-block'}
                 ),
-                html.P('Filter by well status', className='control_label'),
+                html.P('Error Band', className='control_label'),
                 dcc.RadioItems(
                     id='yaxis-type-online',
-                    options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                    value='Linear',
+                    options=[{'label': i, 'value': i} for i in ['Actived', 'Deactived']],
+                    value='Actived',
                     labelStyle={'display': 'inline-block'}
                 ),
                 html.P('Select the Variable:', className='control_label'),
@@ -120,6 +120,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                     dcc.Graph(id='indicator-graphic-online'),
                     dcc.Interval(
                         id='interval-online-graphic',
+                        interval=1*500,
                         n_intervals=0
                     )
                 ]),
