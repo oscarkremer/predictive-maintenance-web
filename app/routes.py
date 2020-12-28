@@ -10,14 +10,14 @@ from time import sleep
 import requests, json, atexit, time
 
 
-@app.route('/')
-def index():
-    return render_template("index.html", title='Home Page')
+@app.route("/")
+def open():
+    return render_template('open.html')
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect('http://0.0.0.0:8000/dashboard', code=302)
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -45,16 +45,17 @@ def request_data():
     except Exception as e:
         return jsonify({'status': 'error'})
    
-@app.route('/logout/')
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect('http://0.0.0.0:8000')
+
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect('http://0.0.0.0:8000')
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(

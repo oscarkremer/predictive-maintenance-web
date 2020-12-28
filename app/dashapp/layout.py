@@ -21,7 +21,9 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 ])
             ]),
             html.Div(className='one-third column', children=[
-                    html.Img(id='plotly-image1',src='assets/default.png', style={'height': '60px', 'width': 'auto', 'margin-bottom': '25px'})
+                html.A(
+                    html.Button('Logout', id='learn-more-button'),
+                    href='http://0.0.0.0:8000/logout')
             ]), 
         ]),
         html.Div(className='row flex-display', children=[
