@@ -4,7 +4,6 @@ from app import db
 from app.models import *
 import pandas as pd
 import dash_table
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
 
 layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction": "column"}, children=
     [
@@ -50,65 +49,27 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                     value='Acelleration'
                 ),
                 html.H6('Database Graphic', className='control_label'),
-                html.P('Filter by construction date (or select range in histogram',className='control_label'),
-                html.Div(id='well_statuses', className='dash_dropdown'),
-                html.P('Filter by well type', className='control_label'),
-                dcc.RadioItems(
-                    id='xaxis-type',
-                    options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                    value='Linear',
-                    labelStyle={'display': 'inline-block'}
-                ),
-                html.P('Filter by well type', className='control_label'),
-                dcc.RadioItems(
-                    id='yaxis-type',
-                    options=[{'label': i, 'value': i} for i in ['Linear', 'Log']],
-                    value='Linear',
-                    labelStyle={'display': 'inline-block'}
-                ),
-                html.P('Filter by well type', className='control_label'),
-
+                html.P('Select the variable', className='control_label'),
                 dcc.Dropdown(
                     id='yaxis-column',
                     options=[{'label': i, 'value': i} for i in ['Acelleration', 'Rotation', 'Temperature']],
                     value='Acelleration'
                 ),
-                html.P('Filter by well type', className='control_label'),
+                html.P('Show the points of the last (hours)', className='control_label'),
                 dcc.Slider(className='rc-slider',
-                        id='year--slider',
+                        id='year-slider',
                         min=1,
-                        max=5,
-                        value=5,
+                        max=10,
+                        value=2,
                         marks={str(year): str(year) for year in range(1,11)},
                         step=None
                 ),
                 html.H6('Anomalies Statistics', className='control_label'),
-                html.Div(className='table', children=[
-                    html.Tr(children=[
-                        html.Th('Date'),
-                        html.Th('Anomaly Type')
-                        ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:31:21'),
-                        html.Td('Frequency'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:33:21'),
-                        html.Td('Outlier'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:31:21'),
-                        html.Td('Frequency'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:33:21'),
-                        html.Td('Outlier'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:33:21'),
-                        html.Td('HTM'),
-                    ])
-                ]),
+                html.Div(className='table', id='table-anomaly'),
+                dcc.Interval(
+                    id='interval-anomalie-table',
+                    n_intervals=0
+                )
             ]),
             html.Div(id='right-column', className='eight columns', children=[
                 html.Div(id='text-output', className='row container-display'),
@@ -120,7 +81,6 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                     dcc.Graph(id='indicator-graphic-online'),
                     dcc.Interval(
                         id='interval-online-graphic',
-                        interval=1*500,
                         n_intervals=0
                     )
                 ]),

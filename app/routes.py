@@ -35,14 +35,25 @@ def request_data():
     pi_data = request.json
     try:
         if pi_data:
-            measure = Measure(acel_x=pi_data['AcX'], acel_y=pi_data['AcY'], acel_z=pi_data['AcZ'],
-                temperature=pi_data['Temperature'], rot_x=pi_data['GyX'], rot_y=pi_data['GyY'],rot_z=pi_data['GyZ'])
-            db.session.add(measure)
-            db.session.commit()
-            return jsonify(pi_data)
+            try:
+                print(pi_data)
+                measure = Measure(acel_x=pi_data['AcX'], down_acel_x = pi_data['DownAcX'], upper_acel_x = pi_data['UpAcX'],
+                    acel_y=pi_data['AcY'], down_acel_y = pi_data['DownAcY'], upper_acel_y = pi_data['UpAcY'],
+                    acel_z=pi_data['AcZ'], down_acel_z = pi_data['DownAcZ'], upper_acel_z = pi_data['UpAcZ'],
+                    rot_x=pi_data['GyX'], down_rot_x = pi_data['DownGyX'], upper_rot_x = pi_data['UpGyX'],
+                    rot_y=pi_data['GyY'], down_rot_y = pi_data['DownGyY'], upper_rot_y = pi_data['UpGyY'],
+                    rot_z=pi_data['GyZ'], down_rot_z = pi_data['DownGyZ'], upper_rot_z = pi_data['UpGyZ'],
+                    temperature=pi_data['Tmp'], down_temperature = pi_data['DownTmp'], upper_temperature = pi_data['UpTmp'])
+                db.session.add(measure)
+                db.session.commit()
+                return jsonify(pi_data)
+            except Exception as e:
+                print('error - {}'.format(e))
+                return jsonify({'status': 'ok'})
         else:
             return jsonify({'status': 'ok'})
     except Exception as e:
+        print('error - {}'.format(e))
         return jsonify({'status': 'error'})
    
 @app.route('/logout')
@@ -54,8 +65,6 @@ def logout():
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
-        return redirect('http://0.0.0.0:8000')
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(
