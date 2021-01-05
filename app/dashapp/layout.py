@@ -73,45 +73,26 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 html.Div(className='table', id='table-anomaly', style={'margin': '0 auto'} ),
                 dcc.Interval(
                     id='interval-anomalie-table',
-                    n_intervals=0
+                    n_intervals=0,
+                    interval=60000
                 )
             ]),
             html.Div(id='right-column', className='nine columns', children=[
-                html.Div(id='text-output', className='row container-display'),
+                html.Div(id='text-output'),
                 dcc.Interval(
                     id='interval-text',
-                    n_intervals=0
+                    n_intervals=0,
+                    interval=20000
                 ),
-                html.Div(className='pretty_container',children=[
-                    dcc.Graph(id='indicator-graphic-online'),
-                    dcc.Interval(
-                        id='interval-online-graphic',
-                        n_intervals=0
-                    )
-                ]),
                 html.Div(className='pretty_container', children=[
                     dcc.Graph(id='indicator-graphic')
             ])
             ])
         ]),
-        html.Div(className='row flex-display', children=[
-            html.Div(className='six columns', children=[
-                html.Div(className='pretty_container', children=[
-                    dcc.Graph(id='anomalies-pie'),
-                    dcc.Interval(
-                        id='interval-anomalie-graphic',
-                        n_intervals=0
-                        )                    
-                ])
-            ]),
-            html.Div(className='six columns', children=[
-                html.Div(className='pretty_container', children=[
-                    dcc.Graph(id='variables-pie'),
-                    dcc.Interval(
-                        id='interval-pie-graphic',
-                        n_intervals=0
-                        )
-                ])
-            ])
-        ])
+        html.Div(className='row flex-display', id='anomaly-pie'),
+        dcc.Interval(
+            id='interval-anomalie-graphic',
+            n_intervals=0,
+            interval=60000
+        ) 
     ])

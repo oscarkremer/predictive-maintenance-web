@@ -123,6 +123,12 @@ body {
   flex-direction: column;
 }
 
+#right2-column {
+  display: flex;
+  flex-direction: column;
+}
+
+
 #wells {
   flex: 1;
 }
