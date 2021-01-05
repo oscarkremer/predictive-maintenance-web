@@ -5,6 +5,9 @@ from app.models import *
 import pandas as pd
 import dash_table
 
+URL_WEB = 'https://www.predictive-maintenance-ifsul.herokuapp.com'
+
+
 layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction": "column"}, children=
     [
         html.Div(id='output-clientside'),
@@ -23,10 +26,11 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 html.Div(children=[
                 html.A(
                     html.Button('Logout', id='learn-more-button'),
-                    href='http://0.0.0.0:8000/logout'),
+                    href='{}/logout'.format(URL_WEB)),
+
                 html.A(
                     html.Button('Account', id='account-button'),
-                    href='http://0.0.0.0:8000/account')
+                    href='{}/account'.format(URL_WEB))
                 ])
             ]), 
         ]),
