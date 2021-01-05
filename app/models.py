@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    telephone = db.Column(db.String(20),unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
@@ -43,12 +44,14 @@ class Measure(db.Model, UserMixin):
     down_temperature = db.Column(db.Float, nullable=False)
     upper_temperature = db.Column(db.Float, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    anomaly = db.relationship('Anomaly', backref='fault', lazy=True)
     def __repr__(self):
         return f"Measure"
 
 
 class Anomaly(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
+    measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable=False)
     variable = db.Column(db.String(30), nullable=False)
     behavior = db.Column(db.String(30), nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.now)

@@ -1,5 +1,6 @@
-from .cerberus import classification
+
+from .anomaly import anomaly
 
 __all__ = [
-    'cerberus'
+    'anomaly',
 ]

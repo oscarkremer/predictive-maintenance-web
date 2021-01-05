@@ -8,8 +8,9 @@ from app.models import *
 from sqlalchemy import desc
 from time import sleep
 import requests, json, atexit, time
+from src.api import anomaly, deepant
 
-
+URL_WEB = 'http://0.0.0.0:8000'
 @app.route("/")
 def open():
     return render_template('open.html')
@@ -17,7 +18,7 @@ def open():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect('http://0.0.0.0:8000/dashboard', code=302)
+        return redirect('{}/dashboard'.format(URL_WEB), code=302)
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -25,7 +26,7 @@ def login():
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(
-                'http://0.0.0.0:8000/dashboard', code=302)
+                '{}/dashboard'.format(URL_WEB), code=302)
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -35,8 +36,8 @@ def request_data():
     pi_data = request.json
     try:
         if pi_data:
+            print(pi_data)
             try:
-                print(pi_data)
                 measure = Measure(acel_x=pi_data['AcX'], down_acel_x = pi_data['DownAcX'], upper_acel_x = pi_data['UpAcX'],
                     acel_y=pi_data['AcY'], down_acel_y = pi_data['DownAcY'], upper_acel_y = pi_data['UpAcY'],
                     acel_z=pi_data['AcZ'], down_acel_z = pi_data['DownAcZ'], upper_acel_z = pi_data['UpAcZ'],
@@ -46,6 +47,7 @@ def request_data():
                     temperature=pi_data['Tmp'], down_temperature = pi_data['DownTmp'], upper_temperature = pi_data['UpTmp'])
                 db.session.add(measure)
                 db.session.commit()
+                anomaly()
                 return jsonify(pi_data)
             except Exception as e:
                 print('error - {}'.format(e))
@@ -60,17 +62,35 @@ def request_data():
 @login_required
 def logout():
     logout_user()
-    return redirect('http://0.0.0.0:8000')
+    return redirect(URL_WEB)
 
+@login_required
+@app.route('/account/', methods=['GET', 'POST'])
+def account():
+    form = AccountUpdateForm()
+    form.setUser(current_user)
+    if form.validate_on_submit():
+        telephone = '{}{}'.format(form.telephone.data[:5], form.telephone.data[6:])
+        current_user.username = form.username.data
+        current_user.email = form.email.data       
+        current_user.telephone = form.telephone.data       
+        db.session.commit()
+        return redirect('{}/dashboard'.format(URL_WEB), code=302)
+    else:
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+        form.telephone.data = current_user.telephone
+    return render_template('account.html', title='Update Account Settings', form=form)
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        telephone = '{}{}'.format(form.telephone.data[:5], form.telephone.data[6:])
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
         user = User(username=form.username.data,
-            email=form.email.data, password=hashed_password)
+            email=form.email.data, telephone=telephone, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('login'))

@@ -20,6 +20,8 @@ class RegistrationForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
+    telephone = StringField('Telephone',
+                        validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
     confirm_password = PasswordField(
         'Confirm Password', validators=[
@@ -50,17 +52,21 @@ class AccountUpdateForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
+    telephone = StringField('Telephone',
+                        validators=[DataRequired()])
     submit = SubmitField('Update')
-    
+    def setUser(self, user):
+        self.user = user
+
     def validate_username(self, username):
-        if username.data != current_user.username:
+        if username.data != self.user.username:
             user_query = User.query.filter_by(username=username.data).first()
             if user_query:
                 raise ValidationError(
                     'That username is taken. Please choose a different one.')
 
     def validate_email(self, email):
-        if email.data != current_user.email:
+        if email.data != self.user.email:
             user_query = User.query.filter_by(email=email.data).first()
             if user_query:
                 raise ValidationError(

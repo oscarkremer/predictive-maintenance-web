@@ -15,7 +15,7 @@ def read_modulate_data(data_file):
         Data ingestion : Function to read and formulate the data
     """
     print('here')
-    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=20)).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(days=1)).order_by(Measure.id)
     rot_x = []
     rot_y = []
     rot_z = []
@@ -233,12 +233,11 @@ def compute(X,Y):
         print("Selection of Model is not in the set")
         return None
 
-if __name__=='__main__':
+def deepant():
     data_file = ""
     MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
     LOOKBACK_SIZE = 10
     data = read_modulate_data(data_file)
-    print('data')
     X,Y,T = data_pre_processing(data)
     loss = compute(X, Y)
     loss_df = pd.DataFrame(loss, columns = ["loss"])
@@ -247,11 +246,27 @@ if __name__=='__main__':
     loss_df["timestamp"] = T
     loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
     sns.set_style("darkgrid")
+    print(loss_df['loss'])
+    print(loss_df['loss'].values[-1])
 
+if __name__=='__main__':
+    data_file = ""
+    MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
+    LOOKBACK_SIZE = 10
+    data = read_modulate_data(data_file)
+    X,Y,T = data_pre_processing(data)
+    loss = compute(X, Y)
+    loss_df = pd.DataFrame(loss, columns = ["loss"])
+    loss_df.index = T
+    loss_df.index = pd.to_datetime(loss_df.index)
+    loss_df["timestamp"] = T
+    loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
+    sns.set_style("darkgrid")
+    print(loss_df['loss'])
+    print(loss_df['loss'].values[-1])
     ax = sns.distplot(loss_df["loss"], bins=100, label="Frequency")
     ax.set_title("Frequency Distribution | Kernel Density Estimation")
     ax.set(xlabel='Anomaly Confidence Score', ylabel='Frequency (sample)')
-    plt.axvline(1.80, color="k", linestyle="--")
     plt.legend()
     plt.show()
 

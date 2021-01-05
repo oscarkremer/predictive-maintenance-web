@@ -84,7 +84,7 @@ def register_callbacks(dashapp):
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['acelleration_x']), 
-                name='X - Axis', 
+                name='Acelleration X', 
                 mode= 'lines',
                 line=dict(color='rgb(177, 119, 51)', width=0.75),
                 line_shape='spline'
@@ -92,7 +92,7 @@ def register_callbacks(dashapp):
             data2 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['acelleration_y']), 
-                name='X - Axis', 
+                name='Acelleration Y', 
                 mode= 'lines',
                 line=dict(color='rgb(137, 209, 255)', width=0.75),
                 line_shape='spline'
@@ -100,7 +100,7 @@ def register_callbacks(dashapp):
             data3 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['acelleration_z']), 
-                name='X - Axis', 
+                name='Acelleration Z', 
                 mode= 'lines',
                 line=dict(color='rgb(0, 255, 0)', width=0.75),
                 line_shape='spline'
@@ -110,7 +110,7 @@ def register_callbacks(dashapp):
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['rotation_x']), 
-                name='X - Axis', 
+                name='Rotation X', 
                 mode= 'lines',
                 line=dict(color='rgb(177, 119, 51)', width=0.75),
                 line_shape='spline'
@@ -118,7 +118,7 @@ def register_callbacks(dashapp):
             data2 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['rotation_y']), 
-                name='X - Axis', 
+                name='Rotation Y', 
                 mode= 'lines',
                 line=dict(color='rgb(137, 209, 255)', width=0.75),
                 line_shape='spline'
@@ -126,7 +126,7 @@ def register_callbacks(dashapp):
             data3 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
                 y=list(data['rotation_z']), 
-                name='X - Axis', 
+                name='Rotation Z', 
                 mode= 'lines',
                 line=dict(color='rgb(0, 255, 0)', width=0.75),
                 line_shape='spline'
@@ -168,9 +168,9 @@ def register_callbacks(dashapp):
                 data['upper_rotation_y'].append(measure.upper_rot_y)
                 data['upper_rotation_z'].append(measure.upper_rot_z)
             df = pd.DataFrame.from_dict(data)
-            data1 = create_data_plot(df, 'rotation_x', error_band, 'Rotation X', 'rgb(177, 119, 51)', 'rgba(177, 119, 51, 0.75)')
-            data2 = create_data_plot(df, 'rotation_y', error_band, 'Rotation Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.75)')
-            data3 = create_data_plot(df, 'rotation_z', error_band, 'Rotation Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.75)')
+            data1 = create_data_plot(df, 'rotation_x', error_band, 'Rotation X', 'rgb(177, 119, 51)', 'rgba(177, 119, 51, 0.5)')
+            data2 = create_data_plot(df, 'rotation_y', error_band, 'Rotation Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.5)')
+            data3 = create_data_plot(df, 'rotation_z', error_band, 'Rotation Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)')
             return {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Rotation (rad/s)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name == 'Acelleration':
             data = {
@@ -198,9 +198,9 @@ def register_callbacks(dashapp):
                 data['upper_acelleration_z'].append(measure.upper_acel_z)
 
             df = pd.DataFrame.from_dict(data)
-            data1 = create_data_plot(df, 'acelleration_x', error_band, 'Acelleration X', 'rgb(177, 119, 51)', 'rgba(177, 119, 51, 0.75)' )
-            data2 = create_data_plot(df, 'acelleration_y', error_band, 'Acelleration Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.75)')
-            data3 = create_data_plot(df, 'acelleration_z', error_band, 'Acelleration Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.75)')
+            data1 = create_data_plot(df, 'acelleration_x', error_band, 'Acelleration X', 'rgb(177, 119, 51)', 'rgba(177, 119, 51, 0.5)' )
+            data2 = create_data_plot(df, 'acelleration_y', error_band, 'Acelleration Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.5)')
+            data3 = create_data_plot(df, 'acelleration_z', error_band, 'Acelleration Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)')
             
             return {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acelleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name == 'Temperature':    
@@ -216,22 +216,30 @@ def register_callbacks(dashapp):
                 data['upper_temperature'].append(measure.upper_temperature)
                 data['time'].append(measure.date)
             df = pd.DataFrame.from_dict(data)
-            data = create_data_plot(df, 'temperature', error_band, 'Temperature', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.75)')
+            data = create_data_plot(df, 'temperature', error_band, 'Temperature', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.5)')
             return {'data': data, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Temperature (°C)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
 
 
     @dashapp.callback(Output('variables-pie', 'figure'),
         [Input('interval-pie-graphic', 'n_intervals')])
     def update_pie_graph_online(n):
-        df = px.data.gapminder().query("continent == 'Asia'")
-        fig = px.pie(df, values='pop', names='country')
+        outlier = Anomaly.query.filter(Anomaly.behavior=='Outlier').count()
+        freq = Anomaly.query.filter(Anomaly.behavior=='Frequency').count()
+        deep = Anomaly.query.filter(Anomaly.behavior=='DeepAnT').count()
+        data = {'variables': ['Outlier', 'Frequency', 'DeepAnT'], 'values': [outlier, freq, deep]}
+        df = pd.DataFrame.from_dict(data)
+        fig = px.pie(df, values='values', names='variables')
         fig.update_traces(textposition='inside')
         fig.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
         return fig
+
     @dashapp.callback(Output('anomalies-pie', 'figure'),
         [Input('interval-anomalie-graphic', 'n_intervals')])
     def update_pie_graph_online(n):
-        data = {'variables': ['acelleration', 'rotation', 'temperature'], 'values': [10, 12, 2]}
+        acelleration = Anomaly.query.filter(Anomaly.variable=='Acelleration').count()
+        rotation = Anomaly.query.filter(Anomaly.variable=='Rotation').count()
+        temperature = Anomaly.query.filter(Anomaly.variable=='Temperature').count()
+        data = {'variables': ['Acelleration', 'Rotation', 'Temperature'], 'values': [acelleration, rotation, temperature]}
         df = pd.DataFrame.from_dict(data)
         fig = px.pie(df, values='values', names='variables')
         fig.update_traces(textposition='inside')
@@ -241,38 +249,21 @@ def register_callbacks(dashapp):
     @dashapp.callback(Output(component_id='table-anomaly', component_property='children'),
         [Input('interval-anomalie-table', 'n_intervals')])
     def update_pie_graph_online(n):
-        return [   
-                    html.Tr(children=[
-                        html.Th('Date'),
-                        html.Th('Anomaly Type'),
-                        html.Th('Variable')
-                        ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:31:21'),
-                        html.Td('Frequency'),
-                        html.Td('Acelleration - X'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:33:21'),
-                        html.Td('Outlier'),
-                        html.Td('Acelleration - Z'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:31:21'),
-                        html.Td('Frequency'),
-                        html.Td('Temperature'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:33:21'),
-                        html.Td('Outlier'),
-                        html.Td('Rotation - X'),
-                    ]),
-                    html.Tr(children=[
-                        html.Td('10/31/2020 20:33:21'),
-                        html.Td('HTM'),
-                        html.Td('Rotation - Y'),
-                    ])
+        table = [html.Tr(children=[
+                    html.Th('Date'),
+                    html.Th('Anomaly Type'),
+                    html.Th('Variable')
+                     ])
                 ]
+        anomalies = Anomaly.query.order_by(Anomaly.id.desc())[:5]
+        for anomaly in anomalies:
+            table.append(html.Tr(children=[    
+                        html.Td(anomaly.date.strftime('%Y-%m-%d %H:%M')),
+                        html.Td(anomaly.behavior),
+                        html.Td(anomaly.variable),
+                    ]))
+        return table
+
 
 def create_data_plot(dataframe, variable, error_band, label, color, band_color):   
     if error_band == 'Actived':

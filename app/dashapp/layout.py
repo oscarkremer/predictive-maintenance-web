@@ -20,19 +20,24 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 ])
             ]),
             html.Div(className='one-third column', children=[
+                html.Div(children=[
                 html.A(
                     html.Button('Logout', id='learn-more-button'),
-                    href='http://0.0.0.0:8000/logout')
+                    href='http://0.0.0.0:8000/logout'),
+                html.A(
+                    html.Button('Account', id='account-button'),
+                    href='http://0.0.0.0:8000/account')
+                ])
             ]), 
         ]),
         html.Div(className='row flex-display', children=[
-            html.Div(id='cross-filter-options', className='pretty_container four columns', children=[
+            html.Div(id='cross-filter-options', className='pretty_container three columns', children=[
                 html.H6('Online Graphic', className='control_label'),
                 html.P('Select readings in the last', className='control_label'),
                 dcc.RadioItems(
                     id='xaxis-type-online',
-                    options=[{'label': i, 'value': i} for i in ['1 minute', '2 minutes', '5 minutes', '10 minutes']],
-                    value='1 minute',
+                    options=[{'label': i, 'value': i} for i in ['10 minutes', '30 minutes', '60 minutes']],
+                    value='10 minutes',
                     labelStyle={'display': 'inline-block'}
                 ),
                 html.P('Error Band', className='control_label'),
@@ -65,13 +70,13 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                         step=None
                 ),
                 html.H6('Anomalies Statistics', className='control_label'),
-                html.Div(className='table', id='table-anomaly'),
+                html.Div(className='table', id='table-anomaly', style={'margin': '0 auto'} ),
                 dcc.Interval(
                     id='interval-anomalie-table',
                     n_intervals=0
                 )
             ]),
-            html.Div(id='right-column', className='eight columns', children=[
+            html.Div(id='right-column', className='nine columns', children=[
                 html.Div(id='text-output', className='row container-display'),
                 dcc.Interval(
                     id='interval-text',
