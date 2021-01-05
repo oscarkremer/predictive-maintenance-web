@@ -9,7 +9,6 @@
 *.rdb
 env/
 __pycache__/
-.env
 .tox/
 *.swp
 *.pdf
