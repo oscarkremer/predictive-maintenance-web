@@ -7,7 +7,7 @@ from app.forms import *
 from app.models import *
 from sqlalchemy import desc
 from time import sleep
-import requests, json, atexit, time
+import requests, json, time
 from src.api import anomaly, deepant
 
 URL_WEB = 'https://www.predictive-maintenance-ifsul.herokuapp.com'
