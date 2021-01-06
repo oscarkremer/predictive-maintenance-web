@@ -62,9 +62,9 @@ def anomaly(measure_id):
         data['id'].append(measure.id)
     if len(data['id']) > 100:
         for variable in ['Acelleration', 'Rotation', 'Temperature', '-']:   
-            last_anomaly = Anomaly.query.filter(Mesaure.variable=='-').order_by(Measure.id.desc()).first()
+            last_anomaly = Anomaly.query.filter(Anomaly.variable==variable).order_by(Anomaly.id.desc()).first()
             if variable=='-':
-                deep_tag = deepant():
+                deep_tag = deepant()
             else:
                 outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
                 if outlier_anomaly:
@@ -77,7 +77,6 @@ def anomaly(measure_id):
                         db.session.add(anomaly)
                         db.session.commit()
             if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
-
                 if variable == '-':
                     if deep_tag:
                         twillio_message(variable, 'DeepAnT')
@@ -89,8 +88,7 @@ def anomaly(measure_id):
                             if frequency_anomaly:
                                 twillio_message(variable, 'Frequency - Algorithm')
                             else:
-                                twillio_message(variable, 'Outlier - Algorithm')    
-                i
+                                twillio_message(variable, 'Outlier - Algorithm')
 
 def anomaly_analysis(data):
     frequency_tag, outlier_tag = False, False
