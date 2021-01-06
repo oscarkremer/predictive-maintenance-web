@@ -3,5 +3,5 @@
 PATH=$PATH:/home/oscarkremer/anaconda3/bin
 cd /home/oscarkremer/predictive-maintenance-ifsul
 source activate
-conda activate predictive-maitenance-ifsul
+conda activate predictive-maintenance-ifsul
 make celery-server

@@ -7,7 +7,7 @@ from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from server.flask_celery import make_celery
+from app.flask_celery import make_celery
 
 def register_dashapps(app):
     from app.dashapp.layout import layout
