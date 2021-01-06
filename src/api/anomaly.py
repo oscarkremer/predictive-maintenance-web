@@ -290,7 +290,8 @@ def compute(X,Y):
             loss_train = train_step(x_batch, y_batch)
             loss_sum += loss_train
             ctr += 1
-        print("Training Loss: {0} - Epoch: {1}".format(float(loss_sum/ctr), epoch+1))
+        if float(loss_sum/ctr) < 0.1:
+            break
     hypothesis = model(torch.tensor(X.astype(np.float32))).detach().numpy()
     loss = np.linalg.norm(hypothesis - Y, axis=1)
     return loss.reshape(len(loss),1), float(loss_sum/ctr)
