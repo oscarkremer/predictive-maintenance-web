@@ -81,7 +81,7 @@ class AccountUpdateForm(FlaskForm):
                 raise ValidationError(
                     'That email is taken. Please choose a different one.')
 
-   def validate_telephone(self, telephone):
+    def validate_telephone(self, telephone):
         if telephone.data != self.user.telephone:
             user = User.query.filter_by(telephone=telephone.data).first()
             if user:
