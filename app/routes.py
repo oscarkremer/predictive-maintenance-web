@@ -11,7 +11,7 @@ import requests, json, time
 from src.api import anomaly, deepant
 
 URL_WEB = 'http://104.154.161.53:5000'
-@app.route("")
+@app.route("/")
 def open():
     return render_template('open.html')
 
