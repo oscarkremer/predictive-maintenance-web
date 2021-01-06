@@ -279,7 +279,8 @@ def create_data_plot(dataframe, variable, error_band, label, color, band_color):
                 y=dataframe[variable],
                 mode='lines',
                 line=dict(color=color, width=0.75),
-                showlegend=False
+                showlegend=False,
+		line_shape='spline'
             ),
             go.Scatter(
                 name='Upper Bound',
@@ -288,7 +289,8 @@ def create_data_plot(dataframe, variable, error_band, label, color, band_color):
                 mode='lines',
                 marker=dict(color="#444"),
                 line=dict(width=0),
-                showlegend=False
+                showlegend=False,
+		line_shape='spline'
             ),
             go.Scatter(
                 name='Lower Bound',
@@ -299,7 +301,8 @@ def create_data_plot(dataframe, variable, error_band, label, color, band_color):
                 mode='lines',
                 fillcolor=band_color,
                 fill='tonexty',
-                showlegend=False
+                showlegend=False,
+		line_shape='spline'
             )
         ]
     else:
@@ -310,6 +313,7 @@ def create_data_plot(dataframe, variable, error_band, label, color, band_color):
                 y=dataframe[variable],
                 mode='lines',
                 line=dict(color=color, width=0.75),
-                showlegend=False
+                showlegend=False,
+		line_shape='spline'
             )
         ]

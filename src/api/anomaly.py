@@ -20,7 +20,7 @@ def twillio_message(variable, algorithm):
         for user in users:
             to_whatsapp_number='whatsapp:{}{}'.format(user.telephone[:5], user.telephone[6:])
             if variable[0] == 'T':
-                client.messages.create(body='Anomaly detected regarding temperature readings, please check if there is any heat sources near your equipment! If your device has any gears or moving parts it may be helpfull to call the maintenance staff and maybe check the lubrication. {}'.format(algorithm),
+                client.messages.create(body='Anomaly detected regarding temperature readings, please check if there is any heat sources near your equipment! If your device has any gears or moving parts it may be helpfull to call the maintenance staff and check the lubrication. {}'.format(algorithm),
                     from_=from_whatsapp_number,
                                 to=to_whatsapp_number)
 
@@ -41,7 +41,7 @@ def twillio_message(variable, algorithm):
         print('excecao twillio - {}'.format(e))
 
 def anomaly(measure_id):
-    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=6), Measure.id<=measure_id).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=4), Measure.id<=measure_id).order_by(Measure.id)
     data = {'Acceleration': {'acel_x': [],
             'acel_y': [],
             'acel_z': []},
@@ -124,9 +124,6 @@ def outlier_function(data):
     dataframe['value'] = data
     Q1 = dataframe.quantile(0.25).value
     Q3 = dataframe.quantile(0.75).value
-    print(data[-1])
-    print(Q1)
-    print(Q3)
     IQR = Q3 - Q1
     if Q1-1.5*IQR< data[-1] < Q3+1.5*IQR:
         outlier_anomaly = False
@@ -154,7 +151,7 @@ def frequency_function(data):
     return frequency_anomaly
 
 def read_modulate_data(data_file):
-    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=6)).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=7)).order_by(Measure.id)
     rot_x = []
     rot_y = []
     rot_z = []
@@ -302,14 +299,14 @@ def compute(X,Y):
     train_data = torch.utils.data.TensorDataset(torch.tensor(X.astype(np.float32)), torch.tensor(Y.astype(np.float32)))
     train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=32, shuffle=False)
     train_step = make_train_step(model, criterion, optimizer)
-    for epoch in range(150):
+    for epoch in range(100):
         loss_sum = 0.0
         ctr = 0
         for x_batch, y_batch in train_loader:
             loss_train = train_step(x_batch, y_batch)
             loss_sum += loss_train
             ctr += 1
-        if float(loss_sum/ctr) < 0.1:
+        if float(loss_sum/ctr) < 0.06:
             break
     hypothesis = model(torch.tensor(X.astype(np.float32))).detach().numpy()
     loss = np.linalg.norm(hypothesis - Y, axis=1)
@@ -322,18 +319,15 @@ def deepant():
         data = read_modulate_data(data_file)
         X,Y,T = data_pre_processing(data)
         loss, train_loss = compute(X, Y)
-        if train_loss < 0.1:
+        if train_loss < 0.06:
             loss_df = pd.DataFrame(loss, columns = ["loss"])
-            
-            
-            
             print('loss',train_loss)
-            if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
+            if loss_df['loss'].values[-1] > loss_df.quantile(0.99).loss:
                 return True
             else:
                 return False
         else:
-            print('Not converged')
+            print('Not converged', train_loss)
             return False
     except Exception as e:
         print('excecao deepant', e)
