@@ -67,10 +67,11 @@ def anomaly(measure_id):
                 anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
                 db.session.add(anomaly)
                 db.session.commit()
-            if frequency_anomaly:
-                anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
-                db.session.add(anomaly)
-                db.session.commit()
+            if variable != 'Temperature':
+                if frequency_anomaly:
+                    anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
+                    db.session.add(anomaly)
+                    db.session.commit()
             if frequency_anomaly or outlier_anomaly:
                 if frequency_anomaly and outlier_anomaly:
                     twillio_message(variable, 'Frequency and Outlier - Algorithm')
@@ -79,15 +80,12 @@ def anomaly(measure_id):
                         twillio_message(variable, 'Frequency - Algorithm')
                     else:
                         twillio_message(variable, 'Outlier - Algorithm')    
-        ano_tag = deepant()
-        print('here')
-        if ano_tag:
-            print('inside if')
+        if deepant():
             try:
                 anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
                 db.session.add(anomaly)
                 db.session.commit()
-#                twillio_message('-', 'DeepAnT - Algorithm')    
+                twillio_message('-', 'DeepAnT - Algorithm')    
             except Exception as e:
                 print('excecao {}'.format(e))
 
@@ -117,13 +115,13 @@ def outlier_function(data):
 def frequency_function(data):
     Data = fftpack.fft(data)
     f_s = 1
-    freqs = fftpack.fftfreq(len(data))
+    freqs = fftpack.fftfreq(len(data), 0.1)
     dataframe = pd.DataFrame()
     dataframe['freqs'] = freqs
     dataframe['magnitude'] = np.abs(Data)
-    filtered = dataframe[dataframe['magnitude']>3]
+    filtered = dataframe[dataframe['magnitude']>500]
     if len(filtered) > 2:
-        print(fildered)
+        print(filtered)
         frequency_anomaly = True
     elif len(filtered) == 1:
         if filtered['freqs'].values[0] == 0.0:
