@@ -73,7 +73,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                         step=None
                 ),
                 html.H6('Anomalies Statistics', className='control_label'),
-                html.Div(className='table', id='table-anomaly', style={'margin': '0 auto'} ),
+                html.Div(className='table', id='table-anomaly', style={"overflow":"auto"} ),
                 dcc.Interval(
                     id='interval-anomalie-table',
                     n_intervals=0,
