@@ -281,7 +281,7 @@ def compute(X,Y):
     train_data = torch.utils.data.TensorDataset(torch.tensor(X.astype(np.float32)), torch.tensor(Y.astype(np.float32)))
     train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=32, shuffle=False)
     train_step = make_train_step(model, criterion, optimizer)
-    for epoch in range(200):
+    for epoch in range(1):
         loss_sum = 0.0
         ctr = 0
         for x_batch, y_batch in train_loader:
@@ -300,12 +300,16 @@ def deepant():
         MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
         data = read_modulate_data(data_file)
         X,Y,T = data_pre_processing(data)
+        print('before compute')
         loss = compute(X, Y)
+        print('after compute')
         loss_df = pd.DataFrame(loss, columns = ["loss"])
+        print('after compute')
         loss_df.index = T
         loss_df.index = pd.to_datetime(loss_df.index)
         loss_df["timestamp"] = T
         loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
+        print('before quantile computation')
         Q1 = loss_df.quantile(0.25)
         if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
             return True 
