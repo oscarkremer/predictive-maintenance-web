@@ -41,6 +41,7 @@ def twillio_message(variable, algorithm):
         pass
 
 def anomaly(measure_id):
+    print('anomaly funtion')
     measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(days=1), Measure.id<=measure_id).order_by(Measure.id)
     data = {'Acelleration': {'acel_x': [],
             'acel_y': [],
@@ -60,7 +61,7 @@ def anomaly(measure_id):
         data['Rotation']['rot_z'].append(measure.rot_z)
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
-    if len(data['id']) > 100:
+    if len(data['id']) > 2:
         print(data['id'][-1])
         print(measure_id)
         for variable in ['Acelleration', 'Rotation', 'Temperature']:

@@ -8,6 +8,8 @@ BUCKET = predictive-maintenance-ifsul
 PROFILE = default
 PROJECT_NAME := predictive-maintenance-ifsul
 PYTHON_INTERPRETER := python3
+START_POINT= 0
+END_POINT= 90
 
 
 ################################################################################
@@ -42,7 +44,6 @@ dirs:
 install:
 	@echo "---> Installing dependencies"
 	@conda env update -f environment.yml
-
 
 pipeline:
 	@(yes | make download features predict)

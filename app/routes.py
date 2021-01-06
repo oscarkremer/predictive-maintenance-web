@@ -97,9 +97,10 @@ def register():
 
 @celery.task(name="routes.process", bind=True)
 def process(self, measure_id):
+    print('anomaly processs')
     try:
         anomaly(measure_id)
     except Exception as e:
-        log('whatafuckkkk')
-        log(e)
+        print('whatafuckkkk')
+        print(e)
 #        raise self.retry(exc=e)

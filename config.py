@@ -11,4 +11,4 @@ class BaseConfig:
     SECRET_KEY = os.environ["SECRET_KEY"]
     CELERY_BROKER_URL = 'amqp://localhost//'
     CELERY_BACKEND = 'db+sqlite:///site.db'
-    CELERY_TASK_DEFAULT_RATE_LIMIT = '2/m'
+    CELERY_TASK_DEFAULT_RATE_LIMIT = '4/m'
