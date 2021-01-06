@@ -110,6 +110,9 @@ def outlier_function(data):
     dataframe['value'] = data
     Q1 = dataframe.quantile(0.25).value
     Q3 = dataframe.quantile(0.75).value
+    print(data[-1])
+    print(Q1)
+    print(Q3)
     IQR = Q3 - Q1
     if Q1-1.5*IQR< data[-1] < Q3+1.5*IQR:
         outlier_anomaly = False
