@@ -80,13 +80,15 @@ def anomaly(measure_id):
                         twillio_message(variable, 'Frequency - Algorithm')
                     else:
                         twillio_message(variable, 'Outlier - Algorithm')    
-        if deepant():
-            print('here')
+        ano_tag = deepant()
+        print('here')
+        if ano_tag:
+            print('inside if')
             try:
                 anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
                 db.session.add(anomaly)
                 db.session.commit()
-                twillio_message('-', 'DeepAnT - Algorithm')    
+#                twillio_message('-', 'DeepAnT - Algorithm')    
             except Exception as e:
                 print('excecao {}'.format(e))
 
@@ -311,9 +313,13 @@ def deepant():
         loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
         print('before quantile computation')
         Q1 = loss_df.quantile(0.25)
+        print('after quantile computation')
         if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
+            print('True')
             return True 
         else:
+            print('False')
+
             return False
     except Exception as e:
         print('excecao deepant', e)
