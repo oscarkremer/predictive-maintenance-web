@@ -37,8 +37,8 @@ def twillio_message(variable, algorithm):
                 client.messages.create(body='DeepAnT',
                         from_=from_whatsapp_number,
                         to=to_whatsapp_number)
-    except:
-        pass
+    except Exception as e:
+        print('excecao twillio - {}'.format(e))
 
 def anomaly(measure_id):
     measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=3), Measure.id<=measure_id).order_by(Measure.id)
@@ -310,10 +310,10 @@ def deepant():
         loss, train_loss = compute(X, Y)
         if train_loss < 0.1:
             loss_df = pd.DataFrame(loss, columns = ["loss"])
-            loss_df.index = T
-            loss_df.index = pd.to_datetime(loss_df.index)
-            loss_df["timestamp"] = T
-            loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
+            
+            
+            
+            print('loss',train_loss)
             if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
                 return True
             else:
