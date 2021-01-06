@@ -81,7 +81,7 @@ def anomaly(measure_id):
                         db.session.add(anomaly)
                         db.session.commit()
             if last_anomaly:
-                if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
+                if datetime.now() - timedelta(hours=3, minutes=5) > last_anomaly.date:
                     if variable == '-':
                         if deep_tag:
                             twillio_message(variable, 'DeepAnT')
