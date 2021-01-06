@@ -18,7 +18,7 @@ def twillio_message(variable, algorithm):
         from_whatsapp_number='whatsapp:+14155238886'
         users = User.query.filter(User.alarms==True).order_by(User.id)
         for user in users:
-            to_whatsapp_number='whatsapp:{}'.format(user.telephone)
+            to_whatsapp_number='whatsapp:{}{}'.format(user.telephone.data[:5], user.telephone.data[6:])
             if variable[0] == 'T':
                 client.messages.create(body='Anomaly detected regarding temperature measures, please check any heat sources near your equipment! If your device has any gears it may be helpfull to call the maintenance staff to check the lubrication. {}'.format(algorithm),
                     from_=from_whatsapp_number,

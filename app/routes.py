@@ -69,7 +69,6 @@ def account():
     form = AccountUpdateForm()
     form.setUser(current_user)
     if form.validate_on_submit():
-        telephone = '{}{}'.format(form.telephone.data[:5], form.telephone.data[6:])
         current_user.username = form.username.data
         current_user.email = form.email.data       
         current_user.telephone = form.telephone.data       
@@ -77,6 +76,7 @@ def account():
         db.session.commit()
         return redirect('{}/dashboard'.format(URL_WEB), code=302)
     else:
+        form.alarms.data = current_user.alarms
         form.username.data = current_user.username
         form.email.data = current_user.email
         form.telephone.data = current_user.telephone
@@ -86,11 +86,10 @@ def account():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        telephone = '{}{}'.format(form.telephone.data[:5], form.telephone.data[6:])
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
         user = User(username=form.username.data, alarms=form.alarms.data,
-            email=form.email.data, telephone=telephone, password=hashed_password)
+            email=form.email.data, telephone=form.telephone.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -98,10 +97,8 @@ def register():
 
 @celery.task(name="routes.process", bind=True)
 def process(self, measure_id):
-    print('anomaly processs')
     try:
         anomaly(measure_id)
     except Exception as e:
-        print('whatafuckkkk')
-        print(e)
+        print('excecao - {}'.format(e))
 #        raise self.retry(exc=e)
