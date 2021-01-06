@@ -81,6 +81,7 @@ def anomaly(measure_id):
                     else:
                         twillio_message(variable, 'Outlier - Algorithm')    
         if deepant():
+            print('here')
             anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
             db.session.add(anomaly)
             db.session.commit()
