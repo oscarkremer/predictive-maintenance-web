@@ -50,8 +50,6 @@ def anomaly(measure_id):
             'Temperature': {'temp':[]},
             'id': []
             }
-    print(data['id'][-1])
-    print(measure_id)
     for measure in measures:
         data['Acelleration']['acel_x'].append(measure.acel_x)
         data['Acelleration']['acel_y'].append(measure.acel_y)
@@ -62,6 +60,8 @@ def anomaly(measure_id):
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
     if len(data['id']) > 100:
+        print(data['id'][-1])
+        print(measure_id)
         for variable in ['Acelleration', 'Rotation', 'Temperature']:
             outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
             if outlier_anomaly:
