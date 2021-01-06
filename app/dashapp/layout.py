@@ -5,8 +5,7 @@ from app.models import *
 import pandas as pd
 import dash_table
 
-URL_WEB = 'https://www.predictive-maintenance-ifsul.herokuapp.com'
-
+URL_WEB = 'http://104.154.161.53:5000'
 
 layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction": "column"}, children=
     [

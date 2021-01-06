@@ -10,8 +10,8 @@ from time import sleep
 import requests, json, time
 from src.api import anomaly, deepant
 
-URL_WEB = 'https://www.predictive-maintenance-ifsul.herokuapp.com'
-@app.route("/")
+URL_WEB = 'http://104.154.161.53:5000'
+@app.route("")
 def open():
     return render_template('open.html')
 
