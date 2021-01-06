@@ -73,6 +73,7 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data       
         current_user.telephone = form.telephone.data       
+        current_user.alarms = form.alarms.data
         db.session.commit()
         return redirect('{}/dashboard'.format(URL_WEB), code=302)
     else:
@@ -88,7 +89,7 @@ def register():
         telephone = '{}{}'.format(form.telephone.data[:5], form.telephone.data[6:])
         hashed_password = bcrypt.generate_password_hash(
             form.password.data).decode('utf-8')
-        user = User(username=form.username.data,
+        user = User(username=form.username.data, alarms=form.alarms.data,
             email=form.email.data, telephone=telephone, password=hashed_password)
         db.session.add(user)
         db.session.commit()
