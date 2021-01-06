@@ -40,7 +40,7 @@ def twillio_message(variable, algorithm):
 
 
 def anomaly(measure_id):
-    measures = Measure.query.filter(date > datetime.now()-timedelta(days=1), id<=measure_id).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(days=1), Measure.id<=measure_id).order_by(Measure.id)
     data = {'Acelleration': {'acel_x': [],
             'acel_y': [],
             'acel_z': []},
