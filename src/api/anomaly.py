@@ -66,21 +66,35 @@ def anomaly(measure_id):
             if variable=='-':
                 deep_tag = deepant()
                 if deep_tag:
-                    anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id)
+                    anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id, date=datetime.now()-timedelta(hours=3))
                     db.session.add(anomaly)
                     db.session.commit()
             else:
                 outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
                 if outlier_anomaly:
-                    anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
+                    anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id, date=datetime.now()-timedelta(hours=3))
                     db.session.add(anomaly)
                     db.session.commit()
                 if variable != 'Temperature':
                     if frequency_anomaly:
-                        anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
+                        anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id, date=datetime.now()-timedelta(hours=3))
                         db.session.add(anomaly)
                         db.session.commit()
-            if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
+            if last_anomaly:
+                if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
+                    if variable == '-':
+                        if deep_tag:
+                            twillio_message(variable, 'DeepAnT')
+                    else:
+                        if frequency_anomaly or outlier_anomaly:
+                            if frequency_anomaly and outlier_anomaly:
+                                twillio_message(variable, 'Frequency and Outlier - Algorithm')
+                            else:
+                                if frequency_anomaly:
+                                    twillio_message(variable, 'Frequency - Algorithm')
+                                else:
+                                    twillio_message(variable, 'Outlier - Algorithm')
+            else:
                 if variable == '-':
                     if deep_tag:
                         twillio_message(variable, 'DeepAnT')
