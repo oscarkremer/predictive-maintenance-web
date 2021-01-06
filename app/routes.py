@@ -51,12 +51,10 @@ def request_data():
                 process.delay(measure.id)
                 return jsonify(pi_data)
             except Exception as e:
-                print('error - {}'.format(e))
                 return jsonify({'status': 'ok'})
         else:
             return jsonify({'status': 'ok'})
     except Exception as e:
-        print('error - {}'.format(e))
         return jsonify({'status': 'error'})
    
 @app.route('/logout')
@@ -102,5 +100,6 @@ def process(self, measure_id):
     try:
         anomaly(measure_id)
     except Exception as e:
+        log('whatafuckkkk')
         log(e)
-        raise self.retry(exc=e)
+#        raise self.retry(exc=e)
