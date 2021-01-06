@@ -55,36 +55,36 @@ def register_callbacks(dashapp):
             data2 = create_data_plot(df, 'rotation_y', error_band, 'Rotation Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.5)')
             data3 = create_data_plot(df, 'rotation_z', error_band, 'Rotation Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)')
             figure = {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Rotation (rad/s)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
-        if yaxis_column_name == 'Acelleration':
+        if yaxis_column_name == 'Acceleration':
             data = {
                 'time': [],
-                'acelleration_x': [],
-                'acelleration_y': [],
-                'acelleration_z': [],
-                'down_acelleration_x': [],
-                'down_acelleration_y': [],
-                'down_acelleration_z': [],
-                'upper_acelleration_x': [],
-                'upper_acelleration_y': [],
-                'upper_acelleration_z': []
+                'acceleration_x': [],
+                'acceleration_y': [],
+                'acceleration_z': [],
+                'down_acceleration_x': [],
+                'down_acceleration_y': [],
+                'down_acceleration_z': [],
+                'upper_acceleration_x': [],
+                'upper_acceleration_y': [],
+                'upper_acceleration_z': []
             }
             for measure in measures:
-                data['acelleration_x'].append(measure.acel_x)
-                data['acelleration_y'].append(measure.acel_y)
-                data['acelleration_z'].append(measure.acel_z)
+                data['acceleration_x'].append(measure.acel_x)
+                data['acceleration_y'].append(measure.acel_y)
+                data['acceleration_z'].append(measure.acel_z)
                 data['time'].append(measure.date)
-                data['down_acelleration_x'].append(measure.down_acel_x)
-                data['down_acelleration_y'].append(measure.down_acel_y)
-                data['down_acelleration_z'].append(measure.down_acel_z)
-                data['upper_acelleration_x'].append(measure.upper_acel_x)
-                data['upper_acelleration_y'].append(measure.upper_acel_y)
-                data['upper_acelleration_z'].append(measure.upper_acel_z)
+                data['down_acceleration_x'].append(measure.down_acel_x)
+                data['down_acceleration_y'].append(measure.down_acel_y)
+                data['down_acceleration_z'].append(measure.down_acel_z)
+                data['upper_acceleration_x'].append(measure.upper_acel_x)
+                data['upper_acceleration_y'].append(measure.upper_acel_y)
+                data['upper_acceleration_z'].append(measure.upper_acel_z)
 
             df = pd.DataFrame.from_dict(data)
-            data1 = create_data_plot(df, 'acelleration_x', error_band, 'Acelleration X', 'rgb(177, 119, 51)', 'rgba(177, 119, 51, 0.5)' )
-            data2 = create_data_plot(df, 'acelleration_y', error_band, 'Acelleration Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.5)')
-            data3 = create_data_plot(df, 'acelleration_z', error_band, 'Acelleration Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)')
-            figure = {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acelleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
+            data1 = create_data_plot(df, 'acceleration_x', error_band, 'Acceleration X', 'rgb(177, 119, 51)', 'rgba(177, 119, 51, 0.5)' )
+            data2 = create_data_plot(df, 'acceleration_y', error_band, 'Acceleration Y', 'rgb(137, 209, 255)', 'rgba(137, 209, 255, 0.5)')
+            data3 = create_data_plot(df, 'acceleration_z', error_band, 'Acceleration Z', 'rgb(0, 255, 0)', 'rgba(0, 255, 0, 0.5)')
+            figure = {'data': data1+data2+data3, 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acceleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name == 'Temperature':    
             data = {
                 'time': [],
@@ -137,9 +137,9 @@ def register_callbacks(dashapp):
         data = {
             'time': [],
             'temperature': [],
-            'acelleration_x': [],
-            'acelleration_y': [],
-            'acelleration_z': [],
+            'acceleration_x': [],
+            'acceleration_y': [],
+            'acceleration_z': [],
             'rotation_x': [],
             'rotation_y': [],
             'rotation_z': []
@@ -151,10 +151,10 @@ def register_callbacks(dashapp):
                 data['rotation_x'].append(measure.rot_x)
                 data['rotation_y'].append(measure.rot_y)
                 data['rotation_z'].append(measure.rot_z)
-            if yaxis_column_name=='Acelleration':
-                data['acelleration_x'].append(measure.acel_x)
-                data['acelleration_y'].append(measure.acel_y)
-                data['acelleration_z'].append(measure.acel_z)
+            if yaxis_column_name=='Acceleration':
+                data['acceleration_x'].append(measure.acel_x)
+                data['acceleration_y'].append(measure.acel_y)
+                data['acceleration_z'].append(measure.acel_z)
             if yaxis_column_name=='Temperature':
                 data['temperature'].append(measure.temperature)
             data['time'].append(measure.date)
@@ -168,32 +168,32 @@ def register_callbacks(dashapp):
                 line_shape='spline'
             ) 
             return {'data': [data], 'layout':{'yaxis': {'height': 350, 'title': {'text': 'Temperature (°C)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
-        if yaxis_column_name=='Acelleration':
+        if yaxis_column_name=='Acceleration':
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
-                y=list(data['acelleration_x']), 
-                name='Acelleration X', 
+                y=list(data['acceleration_x']), 
+                name='Acceleration X', 
                 mode= 'lines',
                 line=dict(color='rgb(177, 119, 51)', width=0.75),
                 line_shape='spline'
             ) 
             data2 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
-                y=list(data['acelleration_y']), 
-                name='Acelleration Y', 
+                y=list(data['acceleration_y']), 
+                name='Acceleration Y', 
                 mode= 'lines',
                 line=dict(color='rgb(137, 209, 255)', width=0.75),
                 line_shape='spline'
             ) 
             data3 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
-                y=list(data['acelleration_z']), 
-                name='Acelleration Z', 
+                y=list(data['acceleration_z']), 
+                name='Acceleration Z', 
                 mode= 'lines',
                 line=dict(color='rgb(0, 255, 0)', width=0.75),
                 line_shape='spline'
             ) 
-            return {'data': [data1,data2,data3], 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acelleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
+            return {'data': [data1,data2,data3], 'layout':{'height': 350, 'yaxis': {'title': {'text': 'Acceleration (m/s²)'}},'margin': {'t':10, 'r':10, 'b':50}}} 
         if yaxis_column_name=='Rotation':
             data1 = plotly.graph_objs.Scatter( 
                 x=list(data['time']), 
@@ -232,10 +232,10 @@ def register_callbacks(dashapp):
         fig1 = px.pie(df, values='values', names='variables')
         fig1.update_traces(textposition='inside')
         fig1.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-        acelleration = Anomaly.query.filter(Anomaly.variable=='Acelleration').count()
+        acceleration = Anomaly.query.filter(Anomaly.variable=='Acceleration').count()
         rotation = Anomaly.query.filter(Anomaly.variable=='Rotation').count()
         temperature = Anomaly.query.filter(Anomaly.variable=='Temperature').count()
-        data = {'variables': ['Acelleration', 'Rotation', 'Temperature'], 'values': [acelleration, rotation, temperature]}
+        data = {'variables': ['Acceleration', 'Rotation', 'Temperature'], 'values': [acceleration, rotation, temperature]}
         df = pd.DataFrame.from_dict(data)
         fig2 = px.pie(df, values='values', names='variables')
         fig2.update_traces(textposition='inside')

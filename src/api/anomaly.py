@@ -20,21 +20,21 @@ def twillio_message(variable, algorithm):
         for user in users:
             to_whatsapp_number='whatsapp:{}{}'.format(user.telephone.data[:5], user.telephone.data[6:])
             if variable[0] == 'T':
-                client.messages.create(body='Anomaly detected regarding temperature measures, please check any heat sources near your equipment! If your device has any gears it may be helpfull to call the maintenance staff to check the lubrication. {}'.format(algorithm),
+                client.messages.create(body='Anomaly detected regarding temperature readings, please check if there is any heat sources near your equipment! If your device has any gears or moving parts it may be helpfull to call the maintenance staff and maybe check the lubrication. {}'.format(algorithm),
                     from_=from_whatsapp_number,
                                 to=to_whatsapp_number)
 
             elif variable[0] == 'A':
-                client.messages.create(body='Vibrations in your equipment point an anomaly, please check your device and all the sorroundings, in special the screws used for suport, its that something is loosed. {}'.format(algorithm),
+                client.messages.create(body='The accelerometer in your equipment pointed an anomaly, please check your device and all the surroundings, in special the screws used for support, its possible that something is loose. {}'.format(algorithm),
                                 from_=from_whatsapp_number,
                                 to=to_whatsapp_number)
 
             elif variable[0] == 'R':
-                client.messages.create(body='Vibrations in your equipment point an anomaly, please check your device and all the sorroundings, in special the screws used for suport, its that something is loosed. {}'.format(algorithm),
+                client.messages.create(body='The gyroscope in your equipment pointed an anomaly, please check your device and all the surroundings, in special the screws used for support, its possible that something is loose. {}'.format(algorithm),
                         from_=from_whatsapp_number,
                         to=to_whatsapp_number)
             else:
-                client.messages.create(body='DeepAnT',
+                client.messages.create(body='DeepAnT algorithm modelled a fault in your system! Contact directly your maintenance staff!',
                         from_=from_whatsapp_number,
                         to=to_whatsapp_number)
     except Exception as e:
@@ -42,7 +42,7 @@ def twillio_message(variable, algorithm):
 
 def anomaly(measure_id):
     measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=3), Measure.id<=measure_id).order_by(Measure.id)
-    data = {'Acelleration': {'acel_x': [],
+    data = {'Acceleration': {'acel_x': [],
             'acel_y': [],
             'acel_z': []},
             'Rotation': {'rot_x': [],
@@ -52,16 +52,16 @@ def anomaly(measure_id):
             'id': []
             }
     for measure in measures:
-        data['Acelleration']['acel_x'].append(measure.acel_x)
-        data['Acelleration']['acel_y'].append(measure.acel_y)
-        data['Acelleration']['acel_z'].append(measure.acel_z)
+        data['Acceleration']['acel_x'].append(measure.acel_x)
+        data['Acceleration']['acel_y'].append(measure.acel_y)
+        data['Acceleration']['acel_z'].append(measure.acel_z)
         data['Rotation']['rot_x'].append(measure.rot_x)
         data['Rotation']['rot_y'].append(measure.rot_y)
         data['Rotation']['rot_z'].append(measure.rot_z)
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
     if len(data['id']) > 100:
-        for variable in ['Acelleration', 'Rotation', 'Temperature', '-']:   
+        for variable in ['Acceleration', 'Rotation', 'Temperature', '-']:   
             last_anomaly = Anomaly.query.filter(Anomaly.variable==variable).order_by(Anomaly.id.desc()).first()
             if variable=='-':
                 deep_tag = deepant()
