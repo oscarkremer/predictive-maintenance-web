@@ -18,7 +18,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
             html.Div(id='title', className='one-half column', children=[
                 html.Div([
                     html.H3('Predictive Maintenance Toolkit', style={'margin-bottom': '0px'}),                   
-                    html.H5('Acelleration and Rotation Module', style={'margin-top': '0px'})
+                    html.H5('Acceleration and Rotation Module', style={'margin-top': '0px'})
                 ])
             ]),
             html.Div(className='one-third column', children=[
@@ -53,15 +53,15 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 html.P('Select the Variable:', className='control_label'),
                 dcc.Dropdown(
                     id='yaxis-column-online',
-                    options=[{'label': i, 'value': i} for i in ['Acelleration', 'Rotation', 'Temperature']],
-                    value='Acelleration'
+                    options=[{'label': i, 'value': i} for i in ['Acceleration', 'Rotation', 'Temperature']],
+                    value='Acceleration'
                 ),
                 html.H6('Database Graphic', className='control_label'),
                 html.P('Select the variable', className='control_label'),
                 dcc.Dropdown(
                     id='yaxis-column',
-                    options=[{'label': i, 'value': i} for i in ['Acelleration', 'Rotation', 'Temperature']],
-                    value='Acelleration'
+                    options=[{'label': i, 'value': i} for i in ['Acceleration', 'Rotation', 'Temperature']],
+                    value='Acceleration'
                 ),
                 html.P('Show the points of the last (hours)', className='control_label'),
                 dcc.Slider(className='rc-slider',
