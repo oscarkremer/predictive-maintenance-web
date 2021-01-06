@@ -67,6 +67,8 @@ def anomaly(measure_id):
                 deep_tag = deepant()
                 if deep_tag:
                     anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id)
+                    db.session.add(anomaly)
+                    db.session.commit()
             else:
                 outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
                 if outlier_anomaly:
