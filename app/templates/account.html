@@ -46,6 +46,12 @@
                         {{form.telephone(class="form-control form-control-lg", placeholder="+55539XXXXXXXX")}}
                     {% endif %}
                 </div>
+                <div class="form-check">
+                    <div class="custom-control custom-checkbox">
+                      {{ form.alarms(class="custom-control-input", type="checkbox") }}
+                      {{ form.alarms.label(class="custom-control-label") }}
+                    </div>
+                  </div>         
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-secondary btn-lg btn-block") }}
