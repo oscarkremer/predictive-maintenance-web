@@ -123,11 +123,14 @@ def frequency_function(data):
     dataframe['magnitude'] = np.abs(Data)
     filtered = dataframe[dataframe['magnitude']>3]
     if len(filtered) > 2:
+        print(fildered)
         frequency_anomaly = True
     elif len(filtered) == 1:
         if filtered['freqs'].values[0] == 0.0:
+            print('here negative right')
             frequency_anomaly = False
         else:
+            print('here positive')
             frequency_anomaly = True
     else:
         frequency_anomaly = False
