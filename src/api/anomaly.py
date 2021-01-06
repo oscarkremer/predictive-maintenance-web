@@ -82,10 +82,13 @@ def anomaly(measure_id):
                         twillio_message(variable, 'Outlier - Algorithm')    
         if deepant():
             print('here')
-            anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
-            db.session.add(anomaly)
-            db.session.commit()
-            twillio_message('-', 'DeepAnT - Algorithm')    
+            try:
+                anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
+                db.session.add(anomaly)
+                db.session.commit()
+                twillio_message('-', 'DeepAnT - Algorithm')    
+            except Exception as e:
+                print('excecao {}'.format(e))
 
 def anomaly_analysis(data):
     frequency_tag, outlier_tag = False, False
