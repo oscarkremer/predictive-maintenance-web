@@ -65,6 +65,8 @@ def anomaly(measure_id):
             last_anomaly = Anomaly.query.filter(Anomaly.variable==variable).order_by(Anomaly.id.desc()).first()
             if variable=='-':
                 deep_tag = deepant()
+                if deep_tag:
+                    anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id)
             else:
                 outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
                 if outlier_anomaly:
@@ -291,7 +293,7 @@ def compute(X,Y):
         print("Training Loss: {0} - Epoch: {1}".format(float(loss_sum/ctr), epoch+1))
     hypothesis = model(torch.tensor(X.astype(np.float32))).detach().numpy()
     loss = np.linalg.norm(hypothesis - Y, axis=1)
-    return loss.reshape(len(loss),1)
+    return loss.reshape(len(loss),1), float(loss_sum/ctr)
 
 def deepant():
     try:
@@ -299,15 +301,19 @@ def deepant():
         MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
         data = read_modulate_data(data_file)
         X,Y,T = data_pre_processing(data)
-        loss = compute(X, Y)
-        loss_df = pd.DataFrame(loss, columns = ["loss"])
-        loss_df.index = T
-        loss_df.index = pd.to_datetime(loss_df.index)
-        loss_df["timestamp"] = T
-        loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
-        if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
-            return True
+        loss, train_loss = compute(X, Y)
+        if train_loss < 0.1:
+            loss_df = pd.DataFrame(loss, columns = ["loss"])
+            loss_df.index = T
+            loss_df.index = pd.to_datetime(loss_df.index)
+            loss_df["timestamp"] = T
+            loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
+            if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
+                return True
+            else:
+                return False
         else:
+            print('Not converged')
             return False
     except Exception as e:
         print('excecao deepant', e)
