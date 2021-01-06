@@ -85,7 +85,7 @@ layout = html.Div(id='mainContainer', style={'display': "flex", "flex-direction"
                 dcc.Interval(
                     id='interval-text',
                     n_intervals=0,
-                    interval=20000
+                    interval=5000
                 ),
                 html.Div(className='pretty_container', children=[
                     dcc.Graph(id='indicator-graphic')

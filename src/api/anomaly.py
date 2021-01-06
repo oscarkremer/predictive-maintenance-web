@@ -41,7 +41,7 @@ def twillio_message(variable, algorithm):
         print('excecao twillio - {}'.format(e))
 
 def anomaly(measure_id):
-    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=3), Measure.id<=measure_id).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=6), Measure.id<=measure_id).order_by(Measure.id)
     data = {'Acceleration': {'acel_x': [],
             'acel_y': [],
             'acel_z': []},
@@ -154,7 +154,7 @@ def frequency_function(data):
     return frequency_anomaly
 
 def read_modulate_data(data_file):
-    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=3)).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=6)).order_by(Measure.id)
     rot_x = []
     rot_y = []
     rot_z = []

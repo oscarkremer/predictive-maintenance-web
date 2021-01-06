@@ -56,7 +56,7 @@ class AccountUpdateForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     telephone = StringField('Telephone',
                         validators=[DataRequired()])
-    alarms = BooleanField('I want messages messages in case of any anomaly, in addition to daily reports.')
+    alarms = BooleanField('I want messages in case of any anomaly, in addition to daily reports.')
     submit = SubmitField('Update')
     def setUser(self, user):
         self.user = user
