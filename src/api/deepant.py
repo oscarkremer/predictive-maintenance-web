@@ -4,8 +4,6 @@ import torch
 from sklearn.preprocessing import MinMaxScaler
 import time
 import datetime
-import matplotlib.pyplot as plt
-import seaborn as sns
 import os
 from app.models import *
 from datetime import timedelta, datetime
