@@ -76,6 +76,10 @@ check_environment:
 	@echo "---> Checking environment.."
 	@python3 test_environment.py
 
+report:
+	@echo "---> Checking environment.."
+	@python3 src/api/whats.py
+
 webserver:
 	@echo "---> Running Webserver.."
 	@gunicorn app:app -b 0.0.0.0:5000
