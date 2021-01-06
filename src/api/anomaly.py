@@ -13,31 +13,32 @@ from sklearn.preprocessing import MinMaxScaler
 LOOKBACK_SIZE = 10
 
 def twillio_message(variable, algorithm):
-    client = Client()
-
-    from_whatsapp_number='whatsapp:+14155238886'
-    users = User.query.order_by(User.id)
-    for user in users:
-        to_whatsapp_number='whatsapp:{}'.format(user.telephone)
-        if variable[0] == 'T':
-            client.messages.create(body='Anomaly detected regarding temperature measures, please check any heat sources near your equipment! If your device has any gears it may be helpfull to call the maintenance staff to check the lubrication. {}'.format(algorithm),
-                from_=from_whatsapp_number,
-                            to=to_whatsapp_number)
-
-        elif variable[0] == 'A':
-            client.messages.create(body='Vibrations in your equipment point an anomaly, please check your device and all the sorroundings, in special the screws used for suport, its that something is loosed. {}'.format(algorithm),
-                            from_=from_whatsapp_number,
-                            to=to_whatsapp_number)
-
-        elif variable[0] == 'R':
-            client.messages.create(body='Vibrations in your equipment point an anomaly, please check your device and all the sorroundings, in special the screws used for suport, its that something is loosed. {}'.format(algorithm),
+    try:
+        client = Client()
+        from_whatsapp_number='whatsapp:+14155238886'
+        users = User.query.order_by(User.id)
+        for user in users:
+            to_whatsapp_number='whatsapp:{}'.format(user.telephone)
+            if variable[0] == 'T':
+                client.messages.create(body='Anomaly detected regarding temperature measures, please check any heat sources near your equipment! If your device has any gears it may be helpfull to call the maintenance staff to check the lubrication. {}'.format(algorithm),
                     from_=from_whatsapp_number,
-                    to=to_whatsapp_number)
-        else:
-            client.messages.create(body='DeepAnT',
-                    from_=from_whatsapp_number,
-                    to=to_whatsapp_number)
+                                to=to_whatsapp_number)
 
+            elif variable[0] == 'A':
+                client.messages.create(body='Vibrations in your equipment point an anomaly, please check your device and all the sorroundings, in special the screws used for suport, its that something is loosed. {}'.format(algorithm),
+                                from_=from_whatsapp_number,
+                                to=to_whatsapp_number)
+
+            elif variable[0] == 'R':
+                client.messages.create(body='Vibrations in your equipment point an anomaly, please check your device and all the sorroundings, in special the screws used for suport, its that something is loosed. {}'.format(algorithm),
+                        from_=from_whatsapp_number,
+                        to=to_whatsapp_number)
+            else:
+                client.messages.create(body='DeepAnT',
+                        from_=from_whatsapp_number,
+                        to=to_whatsapp_number)
+    except:
+        pass
 
 def anomaly(measure_id):
     measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(days=1), Measure.id<=measure_id).order_by(Measure.id)
