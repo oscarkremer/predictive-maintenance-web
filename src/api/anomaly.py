@@ -41,8 +41,7 @@ def twillio_message(variable, algorithm):
         pass
 
 def anomaly(measure_id):
-    print('anomaly funtion')
-    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(days=1), Measure.id<=measure_id).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=3), Measure.id<=measure_id).order_by(Measure.id)
     data = {'Acelleration': {'acel_x': [],
             'acel_y': [],
             'acel_z': []},
@@ -61,9 +60,7 @@ def anomaly(measure_id):
         data['Rotation']['rot_z'].append(measure.rot_z)
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
-    if len(data['id']) > 2:
-        print(data['id'][-1])
-        print(measure_id)
+    if len(data['id']) > 100:
         for variable in ['Acelleration', 'Rotation', 'Temperature']:
             outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
             if outlier_anomaly:
@@ -124,7 +121,7 @@ def frequency_function(data):
     dataframe = pd.DataFrame()
     dataframe['freqs'] = freqs
     dataframe['magnitude'] = np.abs(Data)
-    filtered = dataframe[dataframe['magnitude']>1.5]
+    filtered = dataframe[dataframe['magnitude']>3]
     if len(filtered) > 2:
         frequency_anomaly = True
     elif len(filtered) == 1:
@@ -137,7 +134,7 @@ def frequency_function(data):
     return frequency_anomaly
 
 def read_modulate_data(data_file):
-    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(days=1)).order_by(Measure.id)
+    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=3)).order_by(Measure.id)
     rot_x = []
     rot_y = []
     rot_z = []
@@ -285,7 +282,7 @@ def compute(X,Y):
     train_data = torch.utils.data.TensorDataset(torch.tensor(X.astype(np.float32)), torch.tensor(Y.astype(np.float32)))
     train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=32, shuffle=False)
     train_step = make_train_step(model, criterion, optimizer)
-    for epoch in range(1):
+    for epoch in range(100):
         loss_sum = 0.0
         ctr = 0
         for x_batch, y_batch in train_loader:
@@ -298,30 +295,20 @@ def compute(X,Y):
     return loss.reshape(len(loss),1)
 
 def deepant():
-    print('inside deepant')
     try:
         data_file = ""
         MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
         data = read_modulate_data(data_file)
         X,Y,T = data_pre_processing(data)
-        print('before compute')
         loss = compute(X, Y)
-        print('after compute')
         loss_df = pd.DataFrame(loss, columns = ["loss"])
-        print('after compute')
         loss_df.index = T
         loss_df.index = pd.to_datetime(loss_df.index)
         loss_df["timestamp"] = T
         loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
-        print('before quantile computation')
-        Q1 = loss_df.quantile(0.25)
-        print('after quantile computation')
         if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
-            print('True')
-            return True 
+            return True
         else:
-            print('False')
-
             return False
     except Exception as e:
         print('excecao deepant', e)
