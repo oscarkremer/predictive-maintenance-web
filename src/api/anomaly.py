@@ -61,33 +61,36 @@ def anomaly(measure_id):
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
     if len(data['id']) > 100:
-        for variable in ['Acelleration', 'Rotation', 'Temperature']:
-            outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
-            if outlier_anomaly:
-                anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
-                db.session.add(anomaly)
-                db.session.commit()
-            if variable != 'Temperature':
-                if frequency_anomaly:
-                    anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
+        for variable in ['Acelleration', 'Rotation', 'Temperature', '-']:   
+            last_anomaly = Anomaly.query.filter(Mesaure.variable=='-').order_by(Measure.id.desc()).first()
+            if variable=='-':
+                deep_tag = deepant():
+            else:
+                outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
+                if outlier_anomaly:
+                    anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
                     db.session.add(anomaly)
                     db.session.commit()
-            if frequency_anomaly or outlier_anomaly:
-                if frequency_anomaly and outlier_anomaly:
-                    twillio_message(variable, 'Frequency and Outlier - Algorithm')
-                else:
+                if variable != 'Temperature':
                     if frequency_anomaly:
-                        twillio_message(variable, 'Frequency - Algorithm')
-                    else:
-                        twillio_message(variable, 'Outlier - Algorithm')    
-        if deepant():
-            try:
-                anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
-                db.session.add(anomaly)
-                db.session.commit()
-                twillio_message('-', 'DeepAnT - Algorithm')    
-            except Exception as e:
-                print('excecao {}'.format(e))
+                        anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
+                        db.session.add(anomaly)
+                        db.session.commit()
+            if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
+
+                if variable == '-':
+                    if deep_tag:
+                        twillio_message(variable, 'DeepAnT')
+                else:
+                    if frequency_anomaly or outlier_anomaly:
+                        if frequency_anomaly and outlier_anomaly:
+                            twillio_message(variable, 'Frequency and Outlier - Algorithm')
+                        else:
+                            if frequency_anomaly:
+                                twillio_message(variable, 'Frequency - Algorithm')
+                            else:
+                                twillio_message(variable, 'Outlier - Algorithm')    
+                i
 
 def anomaly_analysis(data):
     frequency_tag, outlier_tag = False, False
@@ -121,14 +124,11 @@ def frequency_function(data):
     dataframe['magnitude'] = np.abs(Data)
     filtered = dataframe[dataframe['magnitude']>500]
     if len(filtered) > 2:
-        print(filtered)
         frequency_anomaly = True
     elif len(filtered) == 1:
         if filtered['freqs'].values[0] == 0.0:
-            print('here negative right')
             frequency_anomaly = False
         else:
-            print('here positive')
             frequency_anomaly = True
     else:
         frequency_anomaly = False
@@ -283,7 +283,7 @@ def compute(X,Y):
     train_data = torch.utils.data.TensorDataset(torch.tensor(X.astype(np.float32)), torch.tensor(Y.astype(np.float32)))
     train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=32, shuffle=False)
     train_step = make_train_step(model, criterion, optimizer)
-    for epoch in range(100):
+    for epoch in range(150):
         loss_sum = 0.0
         ctr = 0
         for x_batch, y_batch in train_loader:
@@ -317,4 +317,4 @@ def deepant():
 
 if __name__ == '__main__':
 #    anomaly()
-    deepant()
+    deepant([])

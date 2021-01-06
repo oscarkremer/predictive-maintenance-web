@@ -224,7 +224,6 @@ def register_callbacks(dashapp):
     @dashapp.callback(Output(component_id='anomaly-pie', component_property='children'),
         [Input('interval-anomalie-graphic', 'n_intervals')])
     def update_pie_graph_online(n):
-        print('here - start')
         outlier = Anomaly.query.filter(Anomaly.behavior=='Outlier').count()
         freq = Anomaly.query.filter(Anomaly.behavior=='Frequency').count()
         deep = Anomaly.query.filter(Anomaly.behavior=='DeepAnT').count()
@@ -241,7 +240,6 @@ def register_callbacks(dashapp):
         fig2 = px.pie(df, values='values', names='variables')
         fig2.update_traces(textposition='inside')
         fig2.update_layout(uniformtext_minsize=12, uniformtext_mode='hide')
-        print('here - end')
         return [html.Div(className='six columns', children=[
                     html.Div(className='pretty_container', children=[
                         dcc.Graph(figure=fig1)                    
