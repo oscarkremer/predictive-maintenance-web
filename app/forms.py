@@ -41,6 +41,12 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError(
                 'That email is taken. Please choose a different one.')
+    
+    def validate_telephone(self, telephone):
+        user = User.query.filter_by(telephone=telephone.data).first()
+        if user:
+            raise ValidationError(
+                'That telephone is taken. Please choose a different one.')
 
 class LoginForm(FlaskForm):
     email = StringField('Email',
@@ -75,4 +81,9 @@ class AccountUpdateForm(FlaskForm):
                 raise ValidationError(
                     'That email is taken. Please choose a different one.')
 
-
+   def validate_telephone(self, telephone):
+        if telephone.data != self.user.telephone:
+            user = User.query.filter_by(telephone=telephone.data).first()
+            if user:
+                raise ValidationError(
+                    'That telephone is taken. Please choose a different one.')
