@@ -2,12 +2,12 @@ import dash
 from flask import Flask
 from flask.helpers import get_root_path
 from flask_login import login_required
-
 from config import BaseConfig
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from server.flask_celery import make_celery
 
 def register_dashapps(app):
     from app.dashapp.layout import layout
@@ -27,7 +27,6 @@ def register_dashapps(app):
         dashapp.title = 'Dashapp 1'
         dashapp.layout = layout
         register_callbacks(dashapp)
-
     _protect_dashviews(dashapp)
 
 
@@ -37,11 +36,10 @@ def _protect_dashviews(dashapp):
             dashapp.server.view_functions[view_func] = login_required(dashapp.server.view_functions[view_func])
 
 app = Flask(__name__)
-#app.config['SECRET_KEY'] = 'd5e15dd080bab91ed0a457aef93f874b0308e35dbde833d9af6f44d888021f6c'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ffplcwjuwnchtz:d5e15dd080bab91ed0a457aef93f874b0308e35dbde833d9af6f44d888021f6c@ec2-54-83-192-245.compute-1.amazonaws.com:5432/da7cfdmp1uib8j'
 app.config.from_object(BaseConfig)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+celery = make_celery(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'

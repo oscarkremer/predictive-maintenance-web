@@ -39,8 +39,8 @@ def twillio_message(variable, algorithm):
                     to=to_whatsapp_number)
 
 
-def anomaly():
-    measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(days=1)).order_by(Measure.id)
+def anomaly(measure_id):
+    measures = Measure.query.filter(date > datetime.now()-timedelta(days=1), id<=measure_id).order_by(Measure.id)
     data = {'Acelleration': {'acel_x': [],
             'acel_y': [],
             'acel_z': []},
@@ -50,6 +50,8 @@ def anomaly():
             'Temperature': {'temp':[]},
             'id': []
             }
+    print(data['id'][-1])
+    print(measure_id)
     for measure in measures:
         data['Acelleration']['acel_x'].append(measure.acel_x)
         data['Acelleration']['acel_y'].append(measure.acel_y)
@@ -59,15 +61,15 @@ def anomaly():
         data['Rotation']['rot_z'].append(measure.rot_z)
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
-    if len(data['id']) > 60:
+    if len(data['id']) > 100:
         for variable in ['Acelleration', 'Rotation', 'Temperature']:
             outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
             if outlier_anomaly:
-                anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=data['id'][-1])
+                anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
                 db.session.add(anomaly)
                 db.session.commit()
             if frequency_anomaly:
-                anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=data['id'][-1])
+                anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
                 db.session.add(anomaly)
                 db.session.commit()
             if frequency_anomaly or outlier_anomaly:
@@ -79,7 +81,7 @@ def anomaly():
                     else:
                         twillio_message(variable, 'Outlier - Algorithm')    
         if deepant():
-            anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=data['id'][-1])
+            anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
             db.session.add(anomaly)
             db.session.commit()
             twillio_message('-', 'DeepAnT - Algorithm')    
@@ -101,7 +103,6 @@ def outlier_function(data):
     Q1 = dataframe.quantile(0.25).value
     Q3 = dataframe.quantile(0.75).value
     IQR = Q3 - Q1
-    print(data[-1])
     if Q1-1.5*IQR< data[-1] < Q3+1.5*IQR:
         outlier_anomaly = False
     else:
@@ -300,8 +301,6 @@ def deepant():
     loss_df["timestamp"] = T
     loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
     Q1 = loss_df.quantile(0.25)
-    print(loss_df['loss'].values[-1])
-    print(loss_df.quantile(0.9).loss)
     if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
         return True 
     else:

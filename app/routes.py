@@ -2,7 +2,8 @@ from flask import redirect, render_template
 from flask import request, jsonify, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
-from app import app, db, bcrypt
+from app import app, db, bcrypt, celery
+from celery.task.control import inspect
 from app.forms import *
 from app.models import *
 from sqlalchemy import desc
@@ -47,7 +48,7 @@ def request_data():
                     temperature=pi_data['Tmp'], down_temperature = pi_data['DownTmp'], upper_temperature = pi_data['UpTmp'])
                 db.session.add(measure)
                 db.session.commit()
-                anomaly()
+                process.delay(measure.id)
                 return jsonify(pi_data)
             except Exception as e:
                 print('error - {}'.format(e))
@@ -96,3 +97,10 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+@celery.task(name="routes.process", bind=True)
+def process(self, measure_id):
+    try:
+        anomaly(measure_id)
+    except Exception as e:
+        log(e)
+        raise self.retry(exc=e)
