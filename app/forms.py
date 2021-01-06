@@ -22,7 +22,7 @@ class RegistrationForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     telephone = StringField('Telephone',
                         validators=[DataRequired()])
-    alarms = BooleanField('I want messages messages in case of any anomaly, in addition to daily reports.')
+    alarms = BooleanField('I want messages in case of any anomaly, in addition to daily reports.')
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
     confirm_password = PasswordField(
         'Confirm Password', validators=[

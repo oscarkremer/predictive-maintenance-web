@@ -16,7 +16,7 @@ def twillio_message(variable, algorithm):
     try:
         client = Client()
         from_whatsapp_number='whatsapp:+14155238886'
-        users = User.query.filter(User.alarms==True).order_by(User.id)
+        users = User.query.order_by(User.id)
         for user in users:
             to_whatsapp_number='whatsapp:{}'.format(user.telephone)
             if variable[0] == 'T':
@@ -37,8 +37,8 @@ def twillio_message(variable, algorithm):
                 client.messages.create(body='DeepAnT',
                         from_=from_whatsapp_number,
                         to=to_whatsapp_number)
-    except Exception as e:
-        print('excecao twillio - {}'.format(e))
+    except:
+        pass
 
 def anomaly(measure_id):
     measures = Measure.query.filter(Measure.date > datetime.now()-timedelta(hours=3), Measure.id<=measure_id).order_by(Measure.id)
@@ -61,38 +61,35 @@ def anomaly(measure_id):
         data['Temperature']['temp'].append(measure.temperature)
         data['id'].append(measure.id)
     if len(data['id']) > 100:
-        for variable in ['Acelleration', 'Rotation', 'Temperature', '-']:   
-            last_anomaly = Anomaly.query.filter(Anomaly.variable==variable).order_by(Anomaly.id.desc()).first()
-            if variable=='-':
-                deep_tag = deepant()
-                if deep_tag:
-                    anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id)
-                    db.session.add(anomaly)
-                    db.session.commit()
-            else:
-                outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
-                if outlier_anomaly:
-                    anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
-                    db.session.add(anomaly)
-                    db.session.commit()
-                if variable != 'Temperature':
-                    if frequency_anomaly:
-                        anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
-                        db.session.add(anomaly)
-                        db.session.commit()
-            if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
-                if variable == '-':
-                    if deep_tag:
-                        twillio_message(variable, 'DeepAnT')
+        for variable in ['Acelleration', 'Rotation', 'Temperature']:
+            outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
+            if outlier_anomaly:
+                anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id)
+                db.session.add(anomaly)
+                db.session.commit()
+            if frequency_anomaly:
+                anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id)
+                db.session.add(anomaly)
+                db.session.commit()
+            if frequency_anomaly or outlier_anomaly:
+                if frequency_anomaly and outlier_anomaly:
+                    twillio_message(variable, 'Frequency and Outlier - Algorithm')
                 else:
-                    if frequency_anomaly or outlier_anomaly:
-                        if frequency_anomaly and outlier_anomaly:
-                            twillio_message(variable, 'Frequency and Outlier - Algorithm')
-                        else:
-                            if frequency_anomaly:
-                                twillio_message(variable, 'Frequency - Algorithm')
-                            else:
-                                twillio_message(variable, 'Outlier - Algorithm')
+                    if frequency_anomaly:
+                        twillio_message(variable, 'Frequency - Algorithm')
+                    else:
+                        twillio_message(variable, 'Outlier - Algorithm')    
+        ano_tag = deepant()
+        print('here')
+        if ano_tag:
+            print('inside if')
+            try:
+                anomaly = Anomaly(behavior='DeepAnT', variable='-', measure_id=measure_id)
+                db.session.add(anomaly)
+                db.session.commit()
+#                twillio_message('-', 'DeepAnT - Algorithm')    
+            except Exception as e:
+                print('excecao {}'.format(e))
 
 def anomaly_analysis(data):
     frequency_tag, outlier_tag = False, False
@@ -110,9 +107,6 @@ def outlier_function(data):
     dataframe['value'] = data
     Q1 = dataframe.quantile(0.25).value
     Q3 = dataframe.quantile(0.75).value
-    print(data[-1])
-    print(Q1)
-    print(Q3)
     IQR = Q3 - Q1
     if Q1-1.5*IQR< data[-1] < Q3+1.5*IQR:
         outlier_anomaly = False
@@ -123,17 +117,20 @@ def outlier_function(data):
 def frequency_function(data):
     Data = fftpack.fft(data)
     f_s = 1
-    freqs = fftpack.fftfreq(len(data), 0.1)
+    freqs = fftpack.fftfreq(len(data))
     dataframe = pd.DataFrame()
     dataframe['freqs'] = freqs
     dataframe['magnitude'] = np.abs(Data)
-    filtered = dataframe[dataframe['magnitude']>500]
+    filtered = dataframe[dataframe['magnitude']>3]
     if len(filtered) > 2:
+        print(filtered)
         frequency_anomaly = True
     elif len(filtered) == 1:
         if filtered['freqs'].values[0] == 0.0:
+            print('here negative right')
             frequency_anomaly = False
         else:
+            print('here positive')
             frequency_anomaly = True
     else:
         frequency_anomaly = False
@@ -288,18 +285,17 @@ def compute(X,Y):
     train_data = torch.utils.data.TensorDataset(torch.tensor(X.astype(np.float32)), torch.tensor(Y.astype(np.float32)))
     train_loader = torch.utils.data.DataLoader(dataset=train_data, batch_size=32, shuffle=False)
     train_step = make_train_step(model, criterion, optimizer)
-    for epoch in range(150):
+    for epoch in range(100):
         loss_sum = 0.0
         ctr = 0
         for x_batch, y_batch in train_loader:
             loss_train = train_step(x_batch, y_batch)
             loss_sum += loss_train
             ctr += 1
-        if float(loss_sum/ctr) < 0.1:
-            break
+        print("Training Loss: {0} - Epoch: {1}".format(float(loss_sum/ctr), epoch+1))
     hypothesis = model(torch.tensor(X.astype(np.float32))).detach().numpy()
     loss = np.linalg.norm(hypothesis - Y, axis=1)
-    return loss.reshape(len(loss),1), float(loss_sum/ctr)
+    return loss.reshape(len(loss),1)
 
 def deepant():
     try:
@@ -307,19 +303,15 @@ def deepant():
         MODEL_SELECTED = "deepant" # Possible Values ['deepant', 'lstmae']
         data = read_modulate_data(data_file)
         X,Y,T = data_pre_processing(data)
-        loss, train_loss = compute(X, Y)
-        if train_loss < 0.1:
-            loss_df = pd.DataFrame(loss, columns = ["loss"])
-            
-            
-            
-            print('loss',train_loss)
-            if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
-                return True
-            else:
-                return False
+        loss = compute(X, Y)
+        loss_df = pd.DataFrame(loss, columns = ["loss"])
+        loss_df.index = T
+        loss_df.index = pd.to_datetime(loss_df.index)
+        loss_df["timestamp"] = T
+        loss_df["timestamp"] = pd.to_datetime(loss_df["timestamp"])
+        if loss_df['loss'].values[-1] > loss_df.quantile(0.9).loss:
+            return True
         else:
-            print('Not converged')
             return False
     except Exception as e:
         print('excecao deepant', e)
@@ -327,4 +319,4 @@ def deepant():
 
 if __name__ == '__main__':
 #    anomaly()
-    deepant([])
+    deepant()
