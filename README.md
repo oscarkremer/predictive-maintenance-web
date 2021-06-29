@@ -1,6 +1,6 @@
-# Mentor
+# Predictive Maintenance Web
 
-Mentor is a Python library to implement a computational model of the Mentor Didactic Robotic Arm. This model was first published in the work *A Genetic Approach for Trajectory Optimization Applied to a Didactic Robot*. The library includes:
+This repository contains a server Mentor is a Python library to implement a computational model of the Mentor Didactic Robotic Arm. This model was first published in the work *A Genetic Approach for Trajectory Optimization Applied to a Didactic Robot*. The library includes:
 
 * Direct kinematics based on Denavit-Hartenberg parameters, where variables represented in the cartesian coordinate space are transformed to joint space.
 * Inverse kinematics to encounter joint angles based on position and orientation matrix.
@@ -31,9 +31,4 @@ General Public License version 3.0 [GPL-3.0](https://choosealicense.com/licenses
 
 Oscar Schmitt Kremer - [Linkedin](https://www.linkedin.com/in/oscar-schmitt-kremer-67aa30134/) [Email](oscar.s.kremer@hotmail.com)
 
-Project Link: [Mentor Repository](https://github.com/oscarkremer/mentor)
-
-## References
-
-O. S. Kremer, M. A. B. Cunha, F. S. Moraes, S. S. Schiavon. *A Genetic Apporach for Trajectory Optimization Applied to a Didactic Robot* **2019 Latin American Robotics Symposium**. 2019.
-[doi:10.1109/LARS-SBR-WRE48964.2019.00049](doi:10.1109/LARS-SBR-WRE48964.2019.00049)
+Project Link: [Mentor Repository](https://github.com/oscarkremer/predictive-maintenance-web)
