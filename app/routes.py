@@ -12,7 +12,7 @@ import requests, json, time
 from datetime import datetime,timedelta
 from src.api import anomaly, deepant
 
-URL_WEB = 'http://104.154.161.53:5000'
+URL_WEB = 'http://0.0.0.0:5000'
 @app.route("/")
 def open():
     return render_template('open.html')
@@ -35,8 +35,9 @@ def login():
 
 @app.route('/request-data', methods=['GET', 'POST'])
 def request_data():
-    pi_data = request.json
+    pi_data = request.values
     try:
+        print(pi_data)
         if pi_data:
             print(pi_data)
             try:
