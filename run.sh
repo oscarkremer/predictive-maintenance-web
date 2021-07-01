@@ -1,5 +1,5 @@
-PATH=$PATH:/home/oscarkremer/anaconda3/bin
-cd /home/oscarkremer/predictive-maintenance-ifsul
+PATH=$PATH:/home/oscar/anaconda3/bin
+cd /home/oscar/predictive-maintenance-web
 source activate
 conda activate predictive-maintenance-ifsul
 make webserver
