@@ -25,7 +25,7 @@ def register_callbacks(dashapp):
         measure = Measure.query.order_by(Measure.id.desc()).first()
         minutes = int(xaxis_type.split(' ')[0])
         error_band = yaxis_type
-        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=minutes, hours=3)).order_by(Measure.id)
+        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(minutes=minutes)).order_by(Measure.id)
         if yaxis_column_name == 'Rotation':
             data = {
                 'time': [],
@@ -144,7 +144,7 @@ def register_callbacks(dashapp):
             'rotation_y': [],
             'rotation_z': []
         }
-        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=3+year_value)).order_by(Measure.id)
+        measures = Measure.query.filter(Measure.date>datetime.now()-timedelta(hours=year_value)).order_by(Measure.id)
         
         for measure in measures:
             if yaxis_column_name=='Rotation':

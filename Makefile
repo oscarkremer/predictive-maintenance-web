@@ -87,3 +87,7 @@ webserver:
 celery-server:
 	@echo "---> Starting asynchronous service, logs are acessible on data/logs/celery.log or run ${WHITE}make logs DOC='celery'${DEFAULT}"
 	@celery -A app.celery worker --loglevel=info --concurrency=1
+
+sensor-simulation:
+	@echo "---> Running simulated.."
+	@python3 src/api/sensor.py

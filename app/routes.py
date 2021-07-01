@@ -47,7 +47,7 @@ def request_data():
                     rot_x=pi_data['GyX'], down_rot_x = pi_data['DownGyX'], upper_rot_x = pi_data['UpGyX'],
                     rot_y=pi_data['GyY'], down_rot_y = pi_data['DownGyY'], upper_rot_y = pi_data['UpGyY'],
                     rot_z=pi_data['GyZ'], down_rot_z = pi_data['DownGyZ'], upper_rot_z = pi_data['UpGyZ'],
-                    temperature=pi_data['Tmp'], down_temperature = pi_data['DownTmp'], upper_temperature = pi_data['UpTmp'], date=datetime.now()-timedelta(hours=3))
+                    temperature=pi_data['Tmp'], down_temperature = pi_data['DownTmp'], upper_temperature = pi_data['UpTmp'], date=datetime.now())
                 db.session.add(measure)
                 db.session.commit()
                 process.delay(measure.id)
