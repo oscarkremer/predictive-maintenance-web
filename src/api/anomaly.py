@@ -66,22 +66,22 @@ def anomaly(measure_id):
             if variable=='-':
                 deep_tag = deepant()
                 if deep_tag:
-                    anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id, date=datetime.now()-timedelta(hours=3))
+                    anomaly = Anomaly(behavior='DeepAnT', variable=variable, measure_id=measure_id, date=datetime.now())
                     db.session.add(anomaly)
                     db.session.commit()
             else:
                 outlier_anomaly, frequency_anomaly = anomaly_analysis(data[variable])
                 if outlier_anomaly:
-                    anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id, date=datetime.now()-timedelta(hours=3))
+                    anomaly = Anomaly(behavior='Outlier', variable=variable, measure_id=measure_id, date=datetime.now())
                     db.session.add(anomaly)
                     db.session.commit()
                 if variable != 'Temperature':
                     if frequency_anomaly:
-                        anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id, date=datetime.now()-timedelta(hours=3))
+                        anomaly = Anomaly(behavior='Frequency', variable=variable, measure_id=measure_id, date=datetime.now())
                         db.session.add(anomaly)
                         db.session.commit()
             if last_anomaly:
-                if datetime.now() - timedelta(hours=3, minutes=5) > last_anomaly.date:
+                if datetime.now() - timedelta(minutes=5) > last_anomaly.date:
                     if variable == '-':
                         if deep_tag:
                             twillio_message(variable, 'DeepAnT')
